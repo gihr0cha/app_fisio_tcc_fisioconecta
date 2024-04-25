@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "521264665454",
+    "firebase_url": "https://fisioconecta-b9fcf-default-rtdb.firebaseio.com",
+    "project_id": "fisioconecta-b9fcf",
+    "storage_bucket": "fisioconecta-b9fcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521264665454:android:bc8db5a7afaf86d550a77f",
+        "android_client_info": {
+          "package_name": "com.example.app_fisio_tcc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiof6N3_FuvB5jyvFdu7RP7Ki64L-dq_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
