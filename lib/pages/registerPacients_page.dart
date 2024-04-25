@@ -128,13 +128,14 @@ class _RegisterPacientsState extends State<RegisterPacients> {
                       ElevatedButton(
                         onPressed: validateAndSubmit,
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.green.shade500,
+                          foregroundColor: Colors.black,
                           backgroundColor: Colors.white,
+                          textStyle: const TextStyle(fontSize: 17),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
                           minimumSize: const Size(
-                              200, 60), // New line to increase the button size
+                              200, 70), // New line to increase the button size
                         ),
                         child: const Text('Salvar'),
                       ),
