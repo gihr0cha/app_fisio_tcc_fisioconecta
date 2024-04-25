@@ -4,7 +4,6 @@ import '../assets/theme_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:app_fisio_tcc/assets/colors/colors.dart';
 
 class RegisterPacients extends StatefulWidget {
   const RegisterPacients({super.key});
@@ -48,6 +47,9 @@ class _RegisterPacientsState extends State<RegisterPacients> {
         }
       });
       print(database);
+      final snackBar = SnackBar(content: Text('Dados salvos com sucesso!'));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(snackBar); // This line has been updated
     }
   }
 
