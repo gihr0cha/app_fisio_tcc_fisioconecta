@@ -48,8 +48,8 @@ class _RegisterPacientsState extends State<RegisterPacients> {
       });
       print(database);
       final snackBar = SnackBar(content: Text('Dados salvos com sucesso!'));
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar); // This line has been updated
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      _formKey.currentState!.reset(); // This line has been added
     }
   }
 
