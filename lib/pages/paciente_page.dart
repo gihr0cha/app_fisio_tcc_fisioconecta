@@ -1,10 +1,12 @@
-import 'package:app_fisio_tcc/assets/colors/colors.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'navegation_page.dart';
+import 'formsPage.dart';
+import 'registerPacients_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class PacientePage extends StatefulWidget {
-  const PacientePage({Key? key});
+  const PacientePage({super.key, Key? paciente});
 
   @override
   State<PacientePage> createState() => _PacientePageState();
@@ -13,44 +15,98 @@ class PacientePage extends StatefulWidget {
 class _PacientePageState extends State<PacientePage> {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    FirebaseDatabase database = FirebaseDatabase.instance;
+
+    final fisio = user?.displayName ?? '';
     return Scaffold(
-      backgroundColor: AppColors.green2,
-      appBar: AppBar(
-        backgroundColor: const Color(0xff4a9700),
-        title: const Column(
-          children: [
-            Text(
-              'FisioConecta - Pacientes',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: AppColors.whiteApp),
+        backgroundColor: Colors.green,
+        appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
+          title: Column(
+            children: [
+              const Text(
+                'FisioConecta - Home',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 22,
+                    color: Colors.grey),
+              ),
+              Text(
+                'Olá, $fisio',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                    color: Colors.grey),
+              ),
+            ],
+          ),
+          toolbarHeight: 72,
+          centerTitle: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(25),
             ),
-          ],
-        ),
-        toolbarHeight: 72,
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(25),
           ),
         ),
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(16.0),
-        decoration: const BoxDecoration(
-          color: AppColors.whiteApp,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-            bottomLeft: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-          ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const RegisterPacients()));
+          },
+          backgroundColor: const Color(0xff4a9700),
+          child: const Icon(Icons.add),
         ),
-      ),
-      bottomNavigationBar: const NavigacaoBar(),
-    );
+        body: StreamBuilder(
+            stream: database.ref().child('pacientes').onValue,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              print(database.ref().child('pacientes').onValue);
+              print(snapshot);
+              if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+                Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
+                Map<String, dynamic> formattedMap = {};
+                print(snapshot);
+                map.forEach((key, value) {
+                  formattedMap[key.toString()] = value;
+                });
+
+                return ListView.builder(
+                  itemCount: formattedMap.length,
+                  itemBuilder: (context, index) {
+                    try {
+                      var patientData = formattedMap.values.toList()[index];
+                      String nome = patientData['nome'];
+                      String dataNascimento = patientData['data_nascimento'];
+                      return InkWell(
+                       onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      FormsSessao(paciente: patientData)));
+                        },
+                        child: ListTile(
+                          title: Text(nome),
+                          subtitle: Text(dataNascimento),
+                        ),
+                      );
+                    } catch (e) {
+                      print(e);
+                      return const ListTile(
+                        title: Text('Erro'),
+                        subtitle: Text('Nenhum dado cadastrado'),
+                      );
+                    }
+                  },
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }}
+            ),
+            bottomNavigationBar: const NavigacaoBar(),
+            )
+          ;
   }
 }

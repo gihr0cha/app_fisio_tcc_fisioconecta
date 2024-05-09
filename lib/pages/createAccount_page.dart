@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,12 +32,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   void validateAndSubmit() async {
     if (validateAndSave()) {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _email!,
-          password: _password!,
-        );
-        await userCredential.user!.updateDisplayName(_name);
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _email!,
+        password: _password!,
+      );
+      await userCredential.user!.updateDisplayName(_name);
+      
+      // Salva os dados do fisioterapeuta no Firebase Realtime Database
+      DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+      dbRef.child('fisioterapeutas').child(userCredential.user!.uid).set({
+        'nome': _name,
+        'pacientes': {}  // Inicialmente, o fisioterapeuta não tem pacientes associados
+      });
         context.go('/home');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
@@ -44,6 +51,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         } else if (e.code == 'email-already-in-use') {
           erroMessage = 'Esse e-mail já está em uso';
         } else {
+          
           erroMessage = 'Erro desconhecido';
         }
         mensagem(context, erroMessage);

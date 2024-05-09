@@ -74,36 +74,6 @@ class _HomePageState extends State<HomePage> {
             bottomRight: Radius.circular(18),
           ),
         ),
-        child: StreamBuilder(
-          stream: database.ref().child(fisio).onValue,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
-              Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-              map = map.cast<String, dynamic>();
-              if (map.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: map.length,
-                  itemBuilder: (context, index) {
-                    var outerData = map.values.toList()[index];
-                    var innerData = outerData.values.toList()[0];
-                    String nome = innerData['nome'] ?? 'Sem nome';
-                    String email = innerData['email'] ?? 'Sem email';
-                    return ListTile(
-                      title: Text(nome),
-                      subtitle: Text(email),
-                    );
-                  },
-                );
-              } else {
-                return const Center(
-                    child: Text(
-                        'A lista está vazia. Por favor, adicione um paciente.'));
-              }
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
       ),
       bottomNavigationBar: const NavigacaoBar(),
     );
