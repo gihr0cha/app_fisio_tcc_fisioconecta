@@ -87,16 +87,10 @@ class _LoginPageState extends State<LoginPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                alignment: Alignment.center,
-                height: 50,
-                width: 240,
-                margin: const EdgeInsets.only(top: 150),
-                child: Image.asset(
-                  Theme.of(context).brightness == Brightness.light
-                      ? 'lib/assets/images/LogoFisioConecta.png'
-                      : 'lib/assets/images/LogoFisioConectaBranco.png',
-                ),
+              Image.asset(
+                Theme.of(context).brightness == Brightness.light
+                    ? 'lib/assets/images/LogoFisioConecta.png'
+                    : 'lib/assets/images/LogoFisioConectaBranco.png',
               ),
               const Padding(
                 padding: EdgeInsets.only(

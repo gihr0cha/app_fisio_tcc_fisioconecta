@@ -91,12 +91,6 @@ class _PacientePageState extends State<PacientePage> {
                       child: ListTile(
                         title: Text(nome),
                         subtitle: Text(dataNascimento),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            database.ref('pacientes').child(nome).remove();
-                          },
-                        ),
                       ),
                     );
                   } catch (e) {
