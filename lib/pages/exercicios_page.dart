@@ -64,21 +64,17 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
               Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-              List<dynamic> exerciciosList = map.values.toList();
-
-              return ListView.builder(
-                itemCount: exerciciosList.length,
+              Map<String, dynamic> formattedMap = {};
+              map.forEach((key, value) {
+                formattedMap[key.toString()] = value;
+              });
+                 return ListView.builder(
+                itemCount: formattedMap.length,
                 itemBuilder: (context, index) {
                   try {
-                    var exercicioData = exerciciosList[index];
+                    var exercicioData = formattedMap.values.toList()[index];
                     String nome = exercicioData;
                     return ListTile(
-                      /* trailing: IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            database.ref('exercicios').child(nome).remove();
-                          },
-                        ), */
                       title: Text(nome),
                     );
                   } catch (e) {

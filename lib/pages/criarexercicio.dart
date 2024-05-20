@@ -29,11 +29,13 @@ class _CriarExercicioState extends State<CriarExercicio> {
     if (validateAndSave()) {
       // Cria um novo nó para o exercício sob 'exercicios'
       DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-      DatabaseReference newExerciseRef = dbRef.child('exercicios').push();
+      DatabaseReference newExerciseRef = dbRef.child('exercicios');
 
-      await newExerciseRef.set({
-        'nome':
-            nomeExercicio, // Aqui você deve substituir 'nomeExercicio' pelo nome do exercício que você deseja adicionar
+      // Generate a unique ID for the exercise
+      String? exerciseId = newExerciseRef.push().key;
+
+      await newExerciseRef.update({
+        exerciseId!: nomeExercicio,
       });
 
       print(database);
