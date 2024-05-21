@@ -1,19 +1,19 @@
+import 'package:app_fisio_tcc/pages/formularioexercicos.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class FormsSessao extends StatefulWidget {
-  final dynamic paciente ;
+  final dynamic paciente;
   const FormsSessao({Key? key, required this.paciente}) : super(key: key);
-
 
   @override
   FormsSessaoState createState() => FormsSessaoState();
-  
 }
+
 class FormsSessaoState extends State<FormsSessao> {
-final user = FirebaseAuth.instance.currentUser;
-FirebaseDatabase database = FirebaseDatabase.instance;
+  final user = FirebaseAuth.instance.currentUser;
+  FirebaseDatabase database = FirebaseDatabase.instance;
   final _formKey = GlobalKey<FormState>();
   final _controller = PageController();
   dynamic paciente;
@@ -23,8 +23,6 @@ FirebaseDatabase database = FirebaseDatabase.instance;
     super.initState();
     paciente = widget.paciente;
   }
-  
-  
 
   final _fieldsinicial = [
     {
@@ -54,25 +52,21 @@ FirebaseDatabase database = FirebaseDatabase.instance;
     },
   ];
 
-  
   Map<String, dynamic> healthParametersinicial = {
-  'freqCardiacaInicial': null,
-  'spo2Inicial': null,
-  'paInicial': null,
-  'pseInicial': null,
-  'dorToracicaInicial': null,
-};
+    'freqCardiacaInicial': null,
+    'spo2Inicial': null,
+    'paInicial': null,
+    'pseInicial': null,
+    'dorToracicaInicial': null,
+  };
 
-Map<String, dynamic> healthParametersfinal = {
-  'freqCardiacaFianl': null,
-  'spo2Final': null,
-  'paFinal': null,
-  'pseFinal': null,
-  'dorToracicaFinal': null,
-};
-
-
-
+  Map<String, dynamic> healthParametersfinal = {
+    'freqCardiacaFianl': null,
+    'spo2Final': null,
+    'paFinal': null,
+    'pseFinal': null,
+    'dorToracicaFinal': null,
+  };
 
   bool validateAndSave() {
     final form = _formKey.currentState;
@@ -80,33 +74,43 @@ Map<String, dynamic> healthParametersfinal = {
       form.save();
       print(healthParametersinicial);
       return true;
-    }
-    else{
+    } else {
       print('não salvou');
       return false;
-      }
+    }
   }
 
-void validateAndSubmit() {
-  if (validateAndSave()) {
-    // Cria um novo nó para a sessão sob 'sessoes'
-    DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-    DatabaseReference newSessionRef = dbRef.child('sessoes').push();
+  void validateAndSubmit() {
+    if (validateAndSave()) {
+      // Cria um novo nó para a sessão sob 'sessoes'
+      DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+      DatabaseReference newSessionRef = dbRef.child('sessoes').push();
 
-   newSessionRef.set({
-      'sessoes':{
-      'inicio_sessao': healthParametersinicial,
-      'fim_sessao': {},
-    }});
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const FormularioExercicios()));
 
-    // Adiciona o ID da sessão à lista de sessões do paciente
-    dbRef.child('pacientes').child(widget.paciente).child('sessoes').update({
-      newSessionRef.key!: true
-    });
+      newSessionRef.set({
+        'sessoes': {
+          'inicio_sessao': healthParametersinicial,
+          'exerciocio':
+              const FormularioExercicios(), // TODO: Adicionar campo de exercício
+          'fim_sessao': healthParametersfinal,
+        }
+      });
 
-    print(database);
+      // Adiciona o ID da sessão à lista de sessões do paciente
+      dbRef
+          .child('pacientes')
+          .child(widget.paciente)
+          .child('sessoes')
+          .update({newSessionRef.key!: true});
+
+      print(database);
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,8 +127,8 @@ void validateAndSubmit() {
               padding: const EdgeInsets.all(8.0),
               child: AlertDialog(
                 content: TextFormField(
-                  decoration:
-                      InputDecoration(labelText: _fieldsinicial[index]['label']),
+                  decoration: InputDecoration(
+                      labelText: _fieldsinicial[index]['label']),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -136,7 +140,8 @@ void validateAndSubmit() {
                     setState(() {
                       switch (index) {
                         case 0:
-                          healthParametersinicial['freqCardiacaInicial'] = value;
+                          healthParametersinicial['freqCardiacaInicial'] =
+                              value;
                           break;
                         case 1:
                           healthParametersinicial['spo2Inicial'] = value;
@@ -169,7 +174,7 @@ void validateAndSubmit() {
                         print(paciente);
                         if (_formKey.currentState!.validate()) {
                           validateAndSubmit();
-                          
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processando Dados')),
                           );
