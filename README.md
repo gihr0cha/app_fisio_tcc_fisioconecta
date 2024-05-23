@@ -40,24 +40,12 @@ flutter pub get
 flutter run
 ```
 
-## Contributing
-
-Contributions are welcome! Please read the [contribution guidelines](./CONTRIBUTING.md) before submitting a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](./LICENSE.md) file for details
 
 ## Acknowledgments
 
 * [Flutter](https://flutter.dev/)
 * [Firebase](https://firebase.google.com/)
-* [Stripe](https://stripe.com/)
 
-## Contact
-
-* [GitHub](https://github.com/giovannicosta)
-* [LinkedIn](https://www.linkedin.com/in/giovannicosta/)
 
 ## Disclaimer
 
