@@ -6,35 +6,6 @@ Meu primeiro projeto
 
 This project is a starting point for a Flutter application.
 
-
-### Home Screen
-
-![Home Screen](./screenshots/home_screen.png)
-
-### Login Screen
-
-![Login Screen](./screenshots/login_screen.png)
-
-### Register Screen
-
-![Register Screen](./screenshots/register_screen.png)
-
-### Profile Screen
-
-![Profile Screen](./screenshots/profile_screen.png)
-
-### Appointment Screen
-
-![Appointment Screen](./screenshots/appointment_screen.png)
-
-### Chat Screen
-
-![Chat Screen](./screenshots/chat_screen.png)
-
-### Payment Screen
-
-![Payment Screen](./screenshots/payment_screen.png)
-
 ## Features
 
 * User authentication
