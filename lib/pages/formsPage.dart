@@ -94,8 +94,8 @@ class FormsSessaoState extends State<FormsSessao> {
       newSessionRef.set({
         'sessoes': {
           'inicio_sessao': healthParametersinicial,
-          'exerciocio':
-              const FormularioExercicios(), // TODO: Adicionar campo de exercício
+          'exercise': 
+              const FormularioExercicios(), 
           'fim_sessao': healthParametersfinal,
         }
       });

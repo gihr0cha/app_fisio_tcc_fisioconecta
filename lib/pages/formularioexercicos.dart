@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FormularioExercicios extends StatefulWidget {
-  const FormularioExercicios({Key? key}) : super(key: key);
+  const FormularioExercicios({super.key});
 
   @override
   _FormularioExercicosState createState() => _FormularioExercicosState();
