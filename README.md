@@ -18,7 +18,6 @@ This project is a starting point for a Flutter application.
 
 * Flutter
 * Firebase
-* Stripe
 
 ## Installation
 
