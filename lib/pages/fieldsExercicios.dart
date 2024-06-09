@@ -22,6 +22,36 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
     }
   }
 
+  validateAndSave() {
+ if (_selectedExercise != null) {
+      DatabaseReference dbRef = _database.ref();
+      DatabaseReference newExerciseRef = dbRef.child('exercicios').push();
+
+      List<String> weights = [];
+      for (int i = 0; i < _numOfSeries; i++) {
+        weights.add(_controllers[i].text);
+      }
+
+      newExerciseRef.set({
+        'exercise': _selectedExercise,
+        'series': _numOfSeries,
+        'weights': weights,
+      });
+
+      // Limpar os campos de texto e redefinir o exercício selecionado e o número de séries
+      _selectedExercise = null;
+      _numOfSeries = 1;
+      for (var controller in _controllers) {
+        controller.clear();
+      }
+      _controllers.length = _numOfSeries;
+
+      print('Dados salvos com sucesso!');
+    } else {
+      print('Por favor, selecione um exercício.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,6 +120,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
               for (int i = 0; i < _numOfSeries; i++) {
                 print(_controllers[i].text);
               }
+              validateAndSave();
             },
             child: const Text('Salvar'),
           ),
