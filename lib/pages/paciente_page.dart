@@ -1,5 +1,5 @@
+import 'fieldsinicial.dart';
 import 'navegation_page.dart';
-import 'formsPage.dart';
 import 'registerPacients_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class _PacientePageState extends State<PacientePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    FormsSessao(paciente: patientData)));
+                                    FieldsInicial(paciente: patientData)));
                       },
                       child: ListTile(
                         title: Text(nome),
