@@ -2,7 +2,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FieldsExercicio extends StatefulWidget {
-  const FieldsExercicio({Key? key, required paciente}) : super(key: key);
+  final dynamic paciente;
+  final dynamic sessionKey;
+
+  const FieldsExercicio(
+      {Key? key, required this.paciente, required this.sessionKey})
+      : super(key: key);
+
   @override
   _FieldsExercicioState createState() => _FieldsExercicioState();
 }
@@ -23,19 +29,22 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
   }
 
   validateAndSave() {
- if (_selectedExercise != null) {
+    if (_selectedExercise != null) {
       DatabaseReference dbRef = _database.ref();
-      DatabaseReference newExerciseRef = dbRef.child('exercicios').push();
+      DatabaseReference sessionRef =
+          dbRef.child('sessoes').child(widget.sessionKey);
 
       List<String> weights = [];
       for (int i = 0; i < _numOfSeries; i++) {
         weights.add(_controllers[i].text);
       }
 
-      newExerciseRef.set({
-        'exercise': _selectedExercise,
-        'series': _numOfSeries,
-        'weights': weights,
+      sessionRef.update({
+        'exercise': {
+          'name': _selectedExercise,
+          'series': _numOfSeries,
+          'weights': weights,
+        },
       });
 
       // Limpar os campos de texto e redefinir o exercício selecionado e o número de séries
@@ -64,9 +73,9 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
                 Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-                Map<String, dynamic> formattedMap = {};
+                Map<String, String> formattedMap = {};
                 map.forEach((key, value) {
-                  formattedMap[key.toString()] = value;
+                  formattedMap[key.toString()] = value.toString();
                 });
                 return DropdownButton<String>(
                   value: _selectedExercise,

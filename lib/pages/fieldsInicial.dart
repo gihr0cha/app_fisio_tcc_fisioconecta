@@ -60,20 +60,17 @@ class _FieldsInicialState extends State<FieldsInicial> {
   void validateAndSubmit() {
     if (validateAndSave()) {
       DatabaseReference dbRef = database.ref();
-      DatabaseReference newSessionRef = dbRef.child('sessoes').push();
+      DateTime now = DateTime.now();
+      String formattedDate =
+          "${now.year}-${now.month}-${now.day} ${now.hour}:${now.minute}";
+      String customKey = "${widget.paciente['nome']}_$formattedDate";
 
-
+      DatabaseReference newSessionRef = dbRef.child('sessoes').child(customKey);
       newSessionRef.set({
-          'inicio_sessao': healthParametersinicial,
-          'exercise': '',
-          'fim_sessao': ''
+        'inicio_sessao': healthParametersinicial,
+        'exercise': '',
+        'fim_sessao': ''
       });
-
-      dbRef
-          .child('pacientes')
-          .child(widget.paciente)
-          .child('sessoes')
-          .update({newSessionRef.key!: true});
 
       print(database);
 
@@ -81,8 +78,9 @@ class _FieldsInicialState extends State<FieldsInicial> {
         context,
         MaterialPageRoute(
           builder: (context) => FieldsExercicio(
-            paciente: widget.paciente,
-          ), 
+            sessionKey: customKey,
+            paciente: widget.paciente['nome'],
+          ),
         ),
       );
     }
@@ -112,8 +110,8 @@ class _FieldsInicialState extends State<FieldsInicial> {
       padding: const EdgeInsets.all(8.0),
       child: AlertDialog(
         content: TextFormField(
-          decoration: InputDecoration(
-              labelText: _fieldsinicial[index]['label']),
+          decoration:
+              InputDecoration(labelText: _fieldsinicial[index]['label']),
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -125,8 +123,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
             setState(() {
               switch (index) {
                 case 0:
-                  healthParametersinicial['freqCardiacaInicial'] =
-                      value;
+                  healthParametersinicial['freqCardiacaInicial'] = value;
                   break;
                 case 1:
                   healthParametersinicial['spo2Inicial'] = value;
