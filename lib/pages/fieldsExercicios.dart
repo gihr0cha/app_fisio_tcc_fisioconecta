@@ -1,3 +1,4 @@
+import 'package:app_fisio_tcc/pages/fieldsFinal.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,14 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
   String? _selectedExercise;
   int _numOfSeries = 1;
   final _controllers = <TextEditingController>[];
-
+  late String sessionKey;
   final _database = FirebaseDatabase.instance;
+  
 
   @override
   void initState() {
     super.initState();
+    sessionKey = widget.sessionKey;
     for (int i = 0; i < _numOfSeries; i++) {
       _controllers.add(TextEditingController());
     }
@@ -32,7 +35,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
     if (_selectedExercise != null) {
       DatabaseReference dbRef = _database.ref();
       DatabaseReference sessionRef =
-          dbRef.child('sessoes').child(widget.sessionKey);
+          dbRef.child('sessoes').child(sessionKey);
 
       List<String> weights = [];
       for (int i = 0; i < _numOfSeries; i++) {
@@ -69,7 +72,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
         padding: const EdgeInsets.all(8.0),
         children: [
           StreamBuilder(
-            stream: _database.ref('exercicios').onValue,
+            stream: _database.ref(sessionKey).onValue,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
                 Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
@@ -132,6 +135,17 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
               validateAndSave();
             },
             child: const Text('Salvar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FieldsFinal(paciente: widget.paciente, sessionKey: sessionKey,),
+                ),
+              );
+            },
+            child: const Text('Continuar'),
           ),
         ],
       ),

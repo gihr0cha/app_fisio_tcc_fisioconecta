@@ -67,9 +67,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
 
       DatabaseReference newSessionRef = dbRef.child('sessoes').child(customKey);
       newSessionRef.set({
-        'inicio_sessao': healthParametersinicial,
-        'exercise': '',
-        'fim_sessao': ''
+        'inicio_sessao': healthParametersinicial
       });
 
       print(database);

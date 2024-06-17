@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 class FieldsFinal extends StatefulWidget {
   final dynamic paciente;
-  const FieldsFinal({Key? key, required this.paciente}) : super(key: key);
+  const FieldsFinal({Key? key, required this.paciente, required sessionKey}) : super(key: key);
 
   @override
   _FieldsFinalState createState() => _FieldsFinalState();
