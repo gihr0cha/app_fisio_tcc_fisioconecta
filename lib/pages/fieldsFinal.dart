@@ -16,6 +16,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
   final _formKey = GlobalKey<FormState>();
   final _controller = PageController();
   dynamic paciente;
+  dynamic sessionKey;
 
   final _fieldsfinal = const [
     {
@@ -58,9 +59,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
 
   void validadeAndSubmit() {
     if (validateAndSave()) {
-      database
-          .ref('pacientes/${paciente['key']}/sessoes/${paciente['sessaoAtual']}/final')
-          .set(healthParametersfinal);
+      DatabaseReference dbRef = database.ref();
+      DatabaseReference sessionRef =
+          dbRef.child('sessoes').child(sessionKey).child('fielsfinal');
       _controller.nextPage(
           duration: const Duration(milliseconds: 500), curve: Curves.ease);
     }
@@ -70,8 +71,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário de Saúde: ${widget.paciente['nome']}'),
+        title: Text('Formulário de Saúde: ${widget.paciente}'),
       ),
+      backgroundColor: Colors.green,
       body: Form(
         key: _formKey,
         child: PageView.builder(
