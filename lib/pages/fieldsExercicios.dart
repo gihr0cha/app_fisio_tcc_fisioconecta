@@ -20,7 +20,6 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
   final _controllers = <TextEditingController>[];
   late String sessionKey;
   final _database = FirebaseDatabase.instance;
-  
 
   @override
   void initState() {
@@ -35,7 +34,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
     if (_selectedExercise != null) {
       DatabaseReference dbRef = _database.ref();
       DatabaseReference sessionRef =
-          dbRef.child('sessoes').child(sessionKey);
+          dbRef.child('sessoes').child(sessionKey).child('exercicios');
 
       List<String> weights = [];
       for (int i = 0; i < _numOfSeries; i++) {
@@ -43,8 +42,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
       }
 
       sessionRef.update({
-        'exercise': {
-          'name': _selectedExercise,
+        _selectedExercise.toString(): {
           'series': _numOfSeries,
           'weights': weights,
         },
@@ -72,7 +70,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
         padding: const EdgeInsets.all(8.0),
         children: [
           StreamBuilder(
-            stream: _database.ref(sessionKey).onValue,
+            stream: _database.ref('exercicios').onValue,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
                 Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
@@ -129,6 +127,12 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
             onPressed: () {
               print(_selectedExercise);
               print(_numOfSeries);
+
+              // Ensure _controllers has enough elements
+              while (_controllers.length < _numOfSeries) {
+                _controllers.add(TextEditingController());
+              }
+
               for (int i = 0; i < _numOfSeries; i++) {
                 print(_controllers[i].text);
               }
@@ -141,7 +145,10 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => FieldsFinal(paciente: widget.paciente, sessionKey: sessionKey,),
+                  builder: (context) => FieldsFinal(
+                    paciente: widget.paciente,
+                    sessionKey: sessionKey,
+                  ),
                 ),
               );
             },
