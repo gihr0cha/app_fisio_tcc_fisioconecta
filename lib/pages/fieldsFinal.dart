@@ -62,6 +62,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
       DatabaseReference dbRef = database.ref();
       DatabaseReference sessionRef =
           dbRef.child('sessoes').child(sessionKey).child('fielsfinal');
+          sessionRef.update({
+            'healthParametersfinal': healthParametersfinal,
+          });
       _controller.nextPage(
           duration: const Duration(milliseconds: 500), curve: Curves.ease);
     }
