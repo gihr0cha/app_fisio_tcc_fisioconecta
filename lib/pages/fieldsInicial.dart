@@ -17,7 +17,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
   final _formKey = GlobalKey<FormState>();
   final _controller = PageController();
   dynamic paciente;
-
+//add dor do paciente 
   final _fieldsinicial = const [
     {
       'label': 'Frequência Cardíaca',

@@ -17,7 +17,7 @@ class FieldsExercicio extends StatefulWidget {
 class _FieldsExercicioState extends State<FieldsExercicio> {
   String? _selectedExercise;
   int _numOfSeries = 1;
-  final _controllers = <TextEditingController>[];
+  var _controllers = <TextEditingController>[];
   late String sessionKey;
   final _database = FirebaseDatabase.instance;
 
@@ -64,8 +64,9 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var scaffold = Scaffold(
       backgroundColor: Colors.green,
+     
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
@@ -78,6 +79,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                 map.forEach((key, value) {
                   formattedMap[key.toString()] = value.toString();
                 });
+              
                 return DropdownButton<String>(
                   value: _selectedExercise,
                   hint: const Text('Selecione um exercício'),
@@ -106,13 +108,16 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
             items: [1, 2, 3, 4, 5].map((int value) {
               return DropdownMenuItem<int>(
                 value: value,
-                child: Text(value.toString()),
+                child: Text('$value série(s)'),
               );
             }).toList(),
             onChanged: (int? newValue) {
               setState(() {
                 _numOfSeries = newValue!;
-                _controllers.length = _numOfSeries;
+                _controllers = List.generate(_numOfSeries, (index) {
+                  return TextEditingController();
+                  // controller é um objeto que controla um campo de texto
+                });
               });
             },
           ),
@@ -157,5 +162,6 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
         ],
       ),
     );
+    return scaffold;
   }
 }
