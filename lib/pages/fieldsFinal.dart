@@ -4,7 +4,9 @@ import 'package:firebase_database/firebase_database.dart';
 
 class FieldsFinal extends StatefulWidget {
   final dynamic paciente;
-  const FieldsFinal({Key? key, required this.paciente, required sessionKey}) : super(key: key);
+  final dynamic sessionKey;
+  const FieldsFinal({Key? key, required this.paciente, required this.sessionKey})
+      : super(key: key);
 
   @override
   _FieldsFinalState createState() => _FieldsFinalState();
@@ -32,7 +34,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
     },
   ];
 
-  Map<String, dynamic> healthParametersfinal = {
+  Map<String, dynamic> healthParametersFinal = {
     'freqCardiacaFinal': null,
     'spo2Final': null,
     'paFinal': null,
@@ -44,6 +46,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
   void initState() {
     super.initState();
     paciente = widget.paciente;
+    sessionKey = widget.sessionKey;
   }
 
   bool validateAndSave() {
@@ -57,14 +60,13 @@ class _FieldsFinalState extends State<FieldsFinal> {
     }
   }
 
-  void validadeAndSubmit() {
+  void validateAndSubmit() {
     if (validateAndSave()) {
       DatabaseReference dbRef = database.ref();
-      DatabaseReference sessionRef =
-          dbRef.child('sessoes').child(sessionKey);
+      DatabaseReference sessionRef = dbRef.child('sessoes').child(sessionKey);
 
       sessionRef.update({
-        'healthParametersfinal': healthParametersfinal,
+        'Parameters Final': healthParametersFinal,
       });
       _controller.nextPage(
           duration: const Duration(milliseconds: 500), curve: Curves.ease);
@@ -101,19 +103,19 @@ class _FieldsFinalState extends State<FieldsFinal> {
                     setState(() {
                       switch (index) {
                         case 0:
-                          healthParametersfinal['freqCardiacaFinal'] = value;
+                          healthParametersFinal['freqCardiacaFinal'] = value;
                           break;
                         case 1:
-                          healthParametersfinal['spo2Final'] = value;
+                          healthParametersFinal['spo2Final'] = value;
                           break;
                         case 2:
-                          healthParametersfinal['paFinal'] = value;
+                          healthParametersFinal['paFinal'] = value;
                           break;
                         case 3:
-                          healthParametersfinal['pseFinal'] = value;
+                          healthParametersFinal['pseFinal'] = value;
                           break;
                         case 4:
-                          healthParametersfinal['dorToracicaFinal'] = value;
+                          healthParametersFinal['dorToracicaFinal'] = value;
                           break;
                       }
                     });
@@ -131,14 +133,11 @@ class _FieldsFinalState extends State<FieldsFinal> {
                   if (index == _fieldsfinal.length - 1)
                     ElevatedButton(
                       onPressed: () {
-                        print(paciente);
-                        if (_formKey.currentState!.validate()) {
-                          validadeAndSubmit();
+                        validateAndSubmit();
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processando Dados')),
-                          );
-                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Processando Dados')),
+                        );
                       },
                       child: const Text('Enviar'),
                     ),

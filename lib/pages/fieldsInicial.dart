@@ -63,7 +63,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
       DateTime now = DateTime.now();
       String formattedDate =
           "${now.year}-${now.month}-${now.day} ${now.hour}:${now.minute}";
-      String customKey = "${widget.paciente['nome']}_$formattedDate";
+      String customKey = "${widget.paciente['nome']} $formattedDate";
 
       DatabaseReference newSessionRef = dbRef.child('sessoes').child(customKey);
       newSessionRef.set({
