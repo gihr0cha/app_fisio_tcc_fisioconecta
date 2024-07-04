@@ -79,7 +79,7 @@ class _PacientePageState extends State<PacientePage> {
                   try {
                     var patientData = formattedMap.values.toList()[index];
                     String nome = patientData['nome'];
-                    String dataNascimento = patientData['data_nascimento'];
+
                     return InkWell(
                       onTap: () {
                         Navigator.push(
@@ -89,8 +89,7 @@ class _PacientePageState extends State<PacientePage> {
                                     FieldsInicial(paciente: patientData)));
                       },
                       child: ListTile(
-                        title: Text(nome),
-                        subtitle: Text(dataNascimento),
+                        title: Text(nome)
                       ),
                     );
                   } catch (e) {

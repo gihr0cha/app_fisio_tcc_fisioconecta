@@ -20,6 +20,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   String? erroMessage;
 
   bool validateAndSave() {
+    // acessa o estado atual do formulário e valida os campos
     final form = formKey.currentState;
     if (form!.validate()) {
       form.save();
@@ -28,7 +29,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       return false;
     }
   }
-
+// A função validateAndSubmit valida os campos do formulário e, se estiverem corretos, cria um novo usuário no Firebase Authentication e salva os dados do fisioterapeuta no Firebase Realtime Database
   void validateAndSubmit() async {
     if (validateAndSave()) {
       try {
@@ -74,6 +75,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ),
           ),
           SingleChildScrollView(
+            // O SingleChildScrollView permite que o conteúdo da tela seja rolável
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -112,10 +114,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
                     child: Column(
                       children: [
+                        // O TextFormField de nome é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
                           onSaved: (value) => _name = value,
+                          
                           textInputAction: TextInputAction.next,
                           style: AppTheme
                               .themeData.inputDecorationTheme.labelStyle,
@@ -125,6 +129,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
+                        // O TextFormField de email é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
@@ -138,6 +143,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
+                        // O TextFormField de senha é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
@@ -152,6 +158,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           ),
                         ),
                         const SizedBox(height: 50),
+                        // O ElevatedButton é um botão que, quando pressionado, chama a função validateAndSubmit
                         SizedBox(
                           width: double.maxFinite,
                           height: 52,
@@ -204,7 +211,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
-
+// A função mensagem exibe uma mensagem de erro na tela
   void mensagem(BuildContext context, String? erroMessage) {
     final snackBar = SnackBar(
       content: Text(erroMessage!),

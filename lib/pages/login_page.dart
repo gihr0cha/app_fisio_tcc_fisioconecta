@@ -11,12 +11,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>();
-  String? _email;
+  final formKey = GlobalKey<FormState>(); // Chave do formulário para validação dos campos
+  String? _email; 
   String? _password;
-  String? erroMessage;
+  String? erroMessage; 
 
   bool validateAndSave() {
+    // O método validateAndSave verifica se o formulário é válido e salva os dados no estado do widget
     final form = formKey.currentState;
     if (form!.validate()) {
       print("Form is valid");
@@ -28,16 +29,18 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void validateAndSubmit() async {
+  void validateAndSubmit() async { 
+    // O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, faz login no Firebase Authentication
     try {
       if (validateAndSave()) {
-        UserCredential user = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email!, password: _password!);
-        print("Usuário logado: ${user.user!.uid}");
+        UserCredential user = await FirebaseAuth.instance // Faz login no Firebase Authentication
+            .signInWithEmailAndPassword(email: _email!, password: _password!); // Email e senha do usuário para login
+        print("Usuário logado: ${user.user!.uid}"); // Imprime o ID do usuário logado no console
         context.go('/home');
       }
     } catch (e) {
-      if (e is FirebaseAuthException) {
+      if (e is FirebaseAuthException) { 
+        // Verifica se a exceção é do tipo FirebaseAuthException e exibe uma mensagem de erro adequada
         switch (e.code) {
           case "user-not-found":
             erroMessage = 'Nenhum usuário encontrado';
@@ -58,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void mensagem(BuildContext context, String? erroMessage) {
+    // O método mensagem exibe uma mensagem de erro na tela usando um SnackBar com um botão para fechar
     final snackBar = SnackBar(
       content: Text(erroMessage!),
       action: SnackBarAction(
@@ -74,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        // O widget Stack permite empilhar widgets uns sobre os outros 
         children: [
           Container(
             padding: const EdgeInsets.only(top: 50),
@@ -112,15 +117,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Form(
-                key: formKey,
+                key: formKey, // Chave do formulário para validação dos campos
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
                   child: Column(
                     children: [
+                      // O TextFormField é um campo de texto que valida o email inserido pelo usuário
                       TextFormField(
                         style:
-                            AppTheme.themeData.inputDecorationTheme.labelStyle,
+                            AppTheme.themeData.inputDecorationTheme.labelStyle, // Estilo do campo de texto
                         validator: (value) =>
                             value!.isEmpty ? 'Campo obrigatório' : null,
                         onSaved: (value) => _email = value,
@@ -131,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
+                      // O TextFormField é um campo de texto que valida a senha inserida pelo usuário
                       TextFormField(
                         style:
                             AppTheme.themeData.inputDecorationTheme.labelStyle,
@@ -174,6 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                                 fontSize: 16, color: AppColors.greyApp),
                           ),
+                          // O TextButton é um botão de texto que, quando pressionado, navega para a página de criação de conta
                           TextButton(
                             onPressed: () => context.go('/createAccount'),
                             child: const Text(

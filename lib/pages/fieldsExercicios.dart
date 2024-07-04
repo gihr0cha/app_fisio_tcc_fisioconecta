@@ -7,7 +7,9 @@ class FieldsExercicio extends StatefulWidget {
   final dynamic sessionKey;
 
   const FieldsExercicio(
-      {Key? key, required this.paciente, required this.sessionKey})
+      {Key? key,
+      required this.paciente,
+      required this.sessionKey}) // Construtor
       : super(key: key);
 
   @override
@@ -15,32 +17,35 @@ class FieldsExercicio extends StatefulWidget {
 }
 
 class _FieldsExercicioState extends State<FieldsExercicio> {
-  String? _selectedExercise;
-  int _numOfSeries = 1;
-  var _controllers = <TextEditingController>[];
-  late String sessionKey;
-  final _database = FirebaseDatabase.instance;
+  String? _selectedExercise; // Exercício selecionado
+  int _numOfSeries = 1; // Número de séries
+  var _controllers =
+      <TextEditingController>[]; // Lista de controladores de texto
+  late String sessionKey; // Chave da sessão
+  final _database = FirebaseDatabase.instance; // Instância do banco de dados
 
   @override
   void initState() {
     super.initState();
-    sessionKey = widget.sessionKey;
+    sessionKey = widget.sessionKey; // Inicializa a chave da sessão
     for (int i = 0; i < _numOfSeries; i++) {
-      _controllers.add(TextEditingController());
+      _controllers.add(
+          TextEditingController()); // Adiciona controladores de texto à lista
     }
   }
 
+// O método validateAndSave verifica se o exercício foi selecionado e salva os dados da sessão no banco de dados
   validateAndSave() {
     if (_selectedExercise != null) {
       DatabaseReference dbRef = _database.ref();
       DatabaseReference sessionRef =
           dbRef.child('sessoes').child(sessionKey).child('exercicios');
 
-      List<String> weights = [];
+      List<String> weights = []; // Lista de pesos
       for (int i = 0; i < _numOfSeries; i++) {
-        weights.add(_controllers[i].text);
+        weights.add(_controllers[i].text); // Adiciona o peso da série à lista
       }
-
+// O método update atualiza o nó do exercício com o número de séries e os pesos inseridos pelo fisioterapeuta
       sessionRef.update({
         _selectedExercise.toString(): {
           'series': _numOfSeries,
@@ -54,7 +59,8 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
       for (var controller in _controllers) {
         controller.clear();
       }
-      _controllers.length = _numOfSeries;
+      _controllers.length =
+          _numOfSeries; // Redefine o tamanho da lista de controladores
 
       print('Dados salvos com sucesso!');
     } else {
@@ -66,20 +72,23 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
       backgroundColor: Colors.green,
-     
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: [
           StreamBuilder(
-            stream: _database.ref('exercicios').onValue,
+            stream: _database
+                .ref('exercicios')
+                .onValue, // Ouve as mudanças no nó 'exercicios' no banco de dados
             builder: (BuildContext context, AsyncSnapshot snapshot) {
+              // Cria um widget DropdownButton com os exercícios disponíveis
+              // Verifica se há dados disponíveis e se o snapshot não é nulo
               if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
                 Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
                 Map<String, String> formattedMap = {};
                 map.forEach((key, value) {
                   formattedMap[key.toString()] = value.toString();
                 });
-              
+                // Retorna um DropdownButton com os exercícios disponíveis
                 return DropdownButton<String>(
                   value: _selectedExercise,
                   hint: const Text('Selecione um exercício'),
@@ -87,10 +96,11 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                       .toList()
                       .map<DropdownMenuItem<String>>((value) {
                     return DropdownMenuItem<String>(
+                      // Retorna um DropdownMenuItem com o valor do exercício
                       value: value,
                       child: Text(value),
                     );
-                  }).toList(),
+                  }).toList(), // Converte a lista de valores em uma lista de DropdownMenuItems
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedExercise = newValue;
@@ -99,18 +109,21 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                 );
               } else {
                 print(snapshot);
-                return const CircularProgressIndicator();
+                return const CircularProgressIndicator(); // Retorna um indicador de progresso se não houver dados disponíveis
               }
             },
           ),
+
           DropdownButton<int>(
             value: _numOfSeries,
+            // Cria um DropdownButton com o número de séries
             items: [1, 2, 3, 4, 5].map((int value) {
               return DropdownMenuItem<int>(
                 value: value,
                 child: Text('$value série(s)'),
               );
             }).toList(),
+            // Atualiza o número de séries selecionado e a lista de controladores de texto
             onChanged: (int? newValue) {
               setState(() {
                 _numOfSeries = newValue!;
@@ -121,6 +134,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
               });
             },
           ),
+          // Cria um campo de texto para cada série e um botão para salvar os dados da sessão
           for (int i = 0; i < _numOfSeries; i++)
             TextFormField(
               controller: _controllers[i],
@@ -145,6 +159,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
             },
             child: const Text('Salvar'),
           ),
+          // Navega para a página FieldsFinal ao pressionar o botão Continuar e passa os dados do paciente e a chave da sessão
           ElevatedButton(
             onPressed: () {
               Navigator.push(

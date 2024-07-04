@@ -8,13 +8,13 @@ class CriarExercicio extends StatefulWidget {
   @override
   State<CriarExercicio> createState() => _CriarExercicioState();
 }
-
+// A classe _CriarExercicioState é um StatefulWidget que cria um formulário para o fisioterapeuta inserir o nome do exercício que deseja adicionar ao banco de dados
 class _CriarExercicioState extends State<CriarExercicio> {
   final user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
   FirebaseDatabase database = FirebaseDatabase.instance;
   String? nomeExercicio;
-
+// O método validateAndSave valida o formulário e salva o nome do exercício no estado do widget
   bool validateAndSave() {
     final form = _formKey.currentState;
     if (form!.validate()) {
@@ -24,7 +24,7 @@ class _CriarExercicioState extends State<CriarExercicio> {
       return false;
     }
   }
-
+// O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, cria um novo nó no banco de dados Firebase Realtime Database para o exercício
   void validateAndSubmit() async {
     if (validateAndSave()) {
       // Cria um novo nó para o exercício sob 'exercicios'
@@ -33,7 +33,7 @@ class _CriarExercicioState extends State<CriarExercicio> {
 
       // Generate a unique ID for the exercise
       String? exerciseId = newExerciseRef.push().key;
-
+// O método update atualiza o nó do exercício com o nome do exercício inserido pelo fisioterapeuta
       await newExerciseRef.update({
         exerciseId!: nomeExercicio,
       });
@@ -41,7 +41,7 @@ class _CriarExercicioState extends State<CriarExercicio> {
       print(database);
     }
   }
-
+// O método build cria um formulário com um campo de texto para o nome do exercício e um botão para enviar o formulário
   @override
   Widget build(BuildContext context) {
     final nome = user?.displayName ?? '';
@@ -50,6 +50,7 @@ class _CriarExercicioState extends State<CriarExercicio> {
       appBar: AppBar(
         title: Text('Bem-vindo $nome'),
       ),
+      // O formulário é criado com um campo de texto para o nome do exercício
       body: Form(
         key: _formKey,
         child: Column(
@@ -59,6 +60,7 @@ class _CriarExercicioState extends State<CriarExercicio> {
               decoration: const InputDecoration(
                 hintText: 'Nome do Exercicio',
               ),
+              // O validador verifica se o campo está vazio e exibe uma mensagem de erro se estiver
               validator: (value) => value!.isEmpty ? 'inválido' : null,
               onSaved: (newValue) => nomeExercicio = newValue,
             ),
