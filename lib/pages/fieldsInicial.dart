@@ -19,6 +19,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
   dynamic paciente;
 //add dor do paciente 
   final _fieldsinicial = const [
+    {'label': 'Dor', 'validator': 'Paciente apresenta dor?'},
     {
       'label': 'Frequência Cardíaca',
       'validator': 'Por favor, insira a frequência cardíaca inicial'
@@ -33,6 +34,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
   ];
 
   Map<String, dynamic> healthParametersinicial = {
+    'dor': false,
     'freqCardiacaInicial': null,
     'spo2Inicial': null,
     'paInicial': null,
@@ -103,13 +105,39 @@ class _FieldsInicialState extends State<FieldsInicial> {
     );
   }
 
-  Widget buildField(BuildContext context, int index) {
+  
+  
+Widget buildField(BuildContext context, int index) {
+  if (index == 0) { // Caso específico para o índice 0 (dor)
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          CheckboxListTile(
+            title: const Text('Paciente apresenta dor?'),
+            value: healthParametersinicial['dor'],
+            onChanged: (bool? value) {
+              setState(() {
+                healthParametersinicial['dor'] = value;
+              });
+            },
+          ),
+          ElevatedButton(
+            onPressed: () => _controller.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            ),
+            child: const Text('Próximo'),
+          ),
+        ],
+      ),
+    );
+  } else { // Para os outros índices, mantém o comportamento anterior
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AlertDialog(
         content: TextFormField(
-          decoration:
-              InputDecoration(labelText: _fieldsinicial[index]['label']),
+          decoration: InputDecoration(labelText: _fieldsinicial[index]['label']),
           keyboardType: TextInputType.number,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -120,19 +148,19 @@ class _FieldsInicialState extends State<FieldsInicial> {
           onChanged: (value) {
             setState(() {
               switch (index) {
-                case 0:
+                case 1:
                   healthParametersinicial['freqCardiacaInicial'] = value;
                   break;
-                case 1:
+                case 2:
                   healthParametersinicial['spo2Inicial'] = value;
                   break;
-                case 2:
+                case 3:
                   healthParametersinicial['paInicial'] = value;
                   break;
-                case 3:
+                case 4:
                   healthParametersinicial['pseInicial'] = value;
                   break;
-                case 4:
+                case 5:
                   healthParametersinicial['dorToracicaInicial'] = value;
                   break;
               }
@@ -151,10 +179,8 @@ class _FieldsInicialState extends State<FieldsInicial> {
           if (index == _fieldsinicial.length - 1)
             ElevatedButton(
               onPressed: () {
-                print(paciente);
                 if (_formKey.currentState!.validate()) {
                   validateAndSubmit();
-
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Processando Dados')),
                   );
@@ -167,3 +193,5 @@ class _FieldsInicialState extends State<FieldsInicial> {
     );
   }
 }
+}
+

@@ -76,10 +76,12 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         children: [
           Container(
+            padding: const EdgeInsets.only(top: 50),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
+
                 colors: [AppColors.greenApp, AppColors.gradienteBaixo],
               ),
             ),
