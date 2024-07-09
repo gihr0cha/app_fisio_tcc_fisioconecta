@@ -68,7 +68,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
       DatabaseReference dbRef = database.ref();
       DateTime now = DateTime.now(); // Data e hora atuais
       String formattedDate =
-          "${now.year}-${now.month}-${now.day} ${now.hour}:${now.minute}";
+          "${now.day}-${now.month}-${now.year} ${now.hour}:${now.minute}";
       String customKey = "${widget.paciente['nome']} $formattedDate"; // Chave personalizada para a sessão com o nome do paciente e a data e hora atuais
 
       DatabaseReference newSessionRef = dbRef.child('sessoes').child(customKey);

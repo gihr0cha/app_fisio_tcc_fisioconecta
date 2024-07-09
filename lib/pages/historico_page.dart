@@ -42,7 +42,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                 String nomePaciente = sessaoKey.split(
                     ' ')[0]; 
                 String dataSessao = sessaoKey.split(
-                    ' ')[1];
+                    ' ')[2];
                 // Simplificação, considera apenas o primeiro nome
 
                 return ListTile(

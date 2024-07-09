@@ -18,7 +18,9 @@ class _RegisterPacientsState extends State<RegisterPacients> {
       databaseURL: 'https://fisioconecta-b9fcf-default-rtdb.firebaseio.com/');
   FirebaseDatabase database = FirebaseDatabase.instance;
   String? nomepaciente;
+  String? sobrenomepaciente;
   String? datanascimentopaciente;
+
   String fisio =
       'fisioterapeutas/${FirebaseAuth.instance.currentUser?.displayName}';
 
@@ -41,7 +43,8 @@ class _RegisterPacientsState extends State<RegisterPacients> {
       DatabaseReference newPatientRef = dbRef.child('pacientes').push();
 
       await newPatientRef.set({
-        'nome': nomepaciente,
+        
+        'nome': '$nomepaciente $sobrenomepaciente', // Concatena o nome e sobrenome
         'data_nascimento': datanascimentopaciente,
         'sessoes': {} // Inicialmente, o paciente não tem sessões associadas
       });
@@ -80,7 +83,16 @@ class _RegisterPacientsState extends State<RegisterPacients> {
             ),
             TextFormField(
               decoration: const InputDecoration(
+                hintText: 'Sobrenome do Paciente',
+              ),
+              validator: (value) => value!.isEmpty ? 'inválido' : null,
+              onSaved: (newValue) => sobrenomepaciente = newValue,
+            ),
+            TextFormField(
+              keyboardType: TextInputType.datetime,
+              decoration: const InputDecoration(
                 hintText: 'data de nascimento',
+                
               ),
               validator: (value) => value!.isEmpty ? 'inválido' : null,
               onSaved: (newValue) => datanascimentopaciente = newValue,

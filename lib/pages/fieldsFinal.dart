@@ -1,3 +1,4 @@
+import 'package:app_fisio_tcc/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -5,7 +6,10 @@ import 'package:firebase_database/firebase_database.dart';
 class FieldsFinal extends StatefulWidget {
   final dynamic paciente; // Paciente
   final dynamic sessionKey; // Chave da sessão
-  const FieldsFinal({Key? key, required this.paciente, required this.sessionKey}) // Construtor
+  const FieldsFinal(
+      {Key? key,
+      required this.paciente,
+      required this.sessionKey}) // Construtor
       : super(key: key); // Chama o construtor da superclasse
 
   @override
@@ -17,11 +21,11 @@ class _FieldsFinalState extends State<FieldsFinal> {
   final database = FirebaseDatabase.instance; // Instância do banco de dados
   final _formKey = GlobalKey<FormState>(); // Chave do formulário
   final _controller = PageController(); // Controlador de página
-  dynamic paciente; 
-  dynamic sessionKey; 
+  dynamic paciente;
+  dynamic sessionKey;
 
   final _fieldsfinal = const [
-    // Lista de campos do formulário 
+    // Lista de campos do formulário
     {
       'label': 'Frequência Cardíaca',
       'validator': 'Por favor, insira a frequência cardíaca final'
@@ -35,7 +39,8 @@ class _FieldsFinalState extends State<FieldsFinal> {
     },
   ];
 
-  Map<String, dynamic> healthParametersFinal = { // Parâmetros de saúde final
+  Map<String, dynamic> healthParametersFinal = {
+    // Parâmetros de saúde final
     'freqCardiacaFinal': null,
     'spo2Final': null,
     'paFinal': null,
@@ -50,7 +55,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
     sessionKey = widget.sessionKey; // Inicializa a chave da sessão
   }
 
-  bool validateAndSave() { 
+  bool validateAndSave() {
     // O método validateAndSave verifica se o formulário é válido e salva os dados no estado do widget
     final form = _formKey.currentState;
     if (form!.validate()) {
@@ -66,7 +71,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
     // O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, atualiza os parâmetros de saúde final no banco de dados
     if (validateAndSave()) {
       DatabaseReference dbRef = database.ref();
-      DatabaseReference sessionRef = dbRef.child('sessoes').child(sessionKey); // Referência da sessão no banco de dados
+      DatabaseReference sessionRef = dbRef
+          .child('sessoes')
+          .child(sessionKey); // Referência da sessão no banco de dados
 
       sessionRef.update({
         'Parameters Final': healthParametersFinal,
@@ -80,30 +87,36 @@ class _FieldsFinalState extends State<FieldsFinal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário de Saúde: ${widget.paciente}'), // Título da barra de aplicativos
+        title: Text(
+            'Formulário de Saúde: ${widget.paciente}'), // Título da barra de aplicativos
       ),
       backgroundColor: Colors.green,
       body: Form(
         key: _formKey,
-        child: PageView.builder( // Cria um PageView com um formulário para cada campo
-          controller: _controller, 
+        child: PageView.builder(
+          // Cria um PageView com um formulário para cada campo
+          controller: _controller,
           itemCount: _fieldsfinal.length, // Número de páginas
-          itemBuilder: (context, index) { // Cria um AlertDialog com um campo de texto para cada campo do formulário
+          itemBuilder: (context, index) {
+            // Cria um AlertDialog com um campo de texto para cada campo do formulário
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: AlertDialog(
                 content: TextFormField(
                   decoration:
-                      InputDecoration(labelText: _fieldsfinal[index]['label']), 
-                  keyboardType: TextInputType.number, // Define o tipo de teclado como numérico
+                      InputDecoration(labelText: _fieldsfinal[index]['label']),
+                  keyboardType: TextInputType
+                      .number, // Define o tipo de teclado como numérico
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return _fieldsfinal[index]['validator']; // Valida o campo para garantir que não esteja vazio
+                      return _fieldsfinal[index][
+                          'validator']; // Valida o campo para garantir que não esteja vazio
                     }
                     return null;
                   },
                   onChanged: (value) {
-                    setState(() { // Atualiza o estado do widget com os dados inseridos pelo fisioterapeuta
+                    setState(() {
+                      // Atualiza o estado do widget com os dados inseridos pelo fisioterapeuta
                       switch (index) {
                         case 0:
                           healthParametersFinal['freqCardiacaFinal'] = value;
@@ -125,7 +138,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
                   },
                 ),
                 actions: [
-                  if (index < _fieldsfinal.length - 1) // Adiciona um botão 'Próximo' se não for a última página
+                  if (index <
+                      _fieldsfinal.length -
+                          1) // Adiciona um botão 'Próximo' se não for a última página
                     ElevatedButton(
                       onPressed: () => _controller.nextPage(
                         duration: const Duration(milliseconds: 300),
@@ -141,6 +156,12 @@ class _FieldsFinalState extends State<FieldsFinal> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Processando Dados')),
                         );
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const HomePage())); // Volta para HomePage após enviar os dados
                       },
                       child: const Text('Enviar'),
                     ),

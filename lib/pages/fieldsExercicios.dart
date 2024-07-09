@@ -1,6 +1,7 @@
 import 'package:app_fisio_tcc/pages/fieldsFinal.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FieldsExercicio extends StatefulWidget {
   final dynamic paciente;
@@ -137,6 +138,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
           // Cria um campo de texto para cada série e um botão para salvar os dados da sessão
           for (int i = 0; i < _numOfSeries; i++)
             TextFormField(
+              keyboardType: TextInputType.number,
               controller: _controllers[i],
               decoration: InputDecoration(
                 labelText: 'Peso da série ${i + 1}',
@@ -149,7 +151,9 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
 
               // Ensure _controllers has enough elements
               while (_controllers.length < _numOfSeries) {
-                _controllers.add(TextEditingController());
+                _controllers.add(TextEditingController(
+                  text: _controllers[_controllers.length - 1].text,
+                ));
               }
 
               for (int i = 0; i < _numOfSeries; i++) {
