@@ -1,11 +1,9 @@
-import 'package:app_fisio_tcc/assets/colors/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:app_fisio_tcc/pages/navegation_page.dart';
 import 'package:flutter/material.dart';
-import 'navegation_page.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HistoricoPage extends StatefulWidget {
-  const HistoricoPage({super.key, Key? paciente});
+  const HistoricoPage({super.key});
 
   @override
   State<HistoricoPage> createState() => _HistoricoPageState();
@@ -14,88 +12,65 @@ class HistoricoPage extends StatefulWidget {
 class _HistoricoPageState extends State<HistoricoPage> {
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     FirebaseDatabase database = FirebaseDatabase.instance;
 
-    final fisio = user?.displayName ?? '';
     return Scaffold(
-      backgroundColor: AppColors.green2,
+      backgroundColor: Colors.green,
       appBar: AppBar(
-        backgroundColor: const Color(0xff4a9700),
-        title: Column(
-          children: [
-            const Text(
-              'FisioConecta - Histórico',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: AppColors.whiteApp),
-            ),
-            Text(
-              'Olá, $fisio',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: AppColors.whiteApp),
-            ),
-          ],
-        ),
-        toolbarHeight: 72,
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(25),
-          ),
-        ),
+        backgroundColor: Colors.blueAccent,
+        title: const Text('Histórico de Sessões'),
       ),
       body: StreamBuilder(
-          stream: database.ref().child('pacientes').onValue,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            print(snapshot);
-            if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
-              Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-              Map<String, dynamic> formattedMap = {};
-              print(snapshot);
-              map.forEach((key, value) {
-                formattedMap[key.toString()] = value;
-              });
-              return ListView.builder(
-                itemCount: formattedMap.length,
-                itemBuilder: (context, index) {
-                  try {
-                    var patientData = formattedMap.values.toList()[index];
-                    String nome = patientData['nome'] ?? 'Nome não disponível';
-                    String datanascimento = patientData['data_nascimento'] ??
-                        'Data de nascimento não disponível';
+        stream: database.ref().child('sessoes').onValue,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
+            Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
+            List<dynamic> sessoes = map.entries.map((entry) {
+              return {
+                "key": entry.key,
+                ...entry.value,
+              };
+            }).toList();
 
-                    return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HistoricoPage(
-                                        paciente: Key(patientData['nome']),
-                                      )));
-                        },
-                        child: ListTile(
-                          title: Text(nome),
-                          subtitle: Text(datanascimento),
-                        ));
-                  } catch (e) {
-                    print(e);
-                    return const ListTile(
-                      title: Text('Erro'),
-                      subtitle: Text('Nenhum dado cadastrado'),
-                    );
-                  }
-                },
-              );
-            } else {
-              return const CircularProgressIndicator();
-            }
-          }),
+            return ListView.builder(
+              itemCount: sessoes.length,
+              itemBuilder: (context, index) {
+                var sessaoData = sessoes[index];
+                String sessaoKey = sessaoData['key'];
+               
+
+                String nomePaciente = sessaoKey.split(
+                    ' ')[0]; 
+                String dataSessao = sessaoKey.split(
+                    ' ')[1];
+                // Simplificação, considera apenas o primeiro nome
+
+                return ListTile(
+                  title: Text(
+                    'Sessão com $nomePaciente',
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Data: $dataSessao',
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  onTap: () {
+                    //abrir detalhes da sessão
+                  },
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return const Text('Erro ao carregar dados');
+          } else {
+            return const CircularProgressIndicator();
+          }
+        },
+      ),
       bottomNavigationBar: const NavigacaoBar(),
     );
   }
