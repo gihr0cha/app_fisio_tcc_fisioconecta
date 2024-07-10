@@ -77,11 +77,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       body: Stack(
+        alignment: FractionalOffset.center,
         // O widget Stack permite empilhar widgets uns sobre os outros 
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 50),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -93,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 Theme.of(context).brightness == Brightness.light
