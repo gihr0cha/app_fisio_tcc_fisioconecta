@@ -30,8 +30,8 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                 Map<String, dynamic>.from(session['inicio_sessao'] as Map);
             var exercicios =
                 Map<String, dynamic>.from(session['exercicios'] as Map);
-            //var finalSessao =
-                //Map<String, dynamic>.from(session['final_sessao'] as Map);
+            var finalSessao =
+                Map<String, dynamic>.from(session['final_sessao'] as Map);
             return ListView(
               children: [
                 ExpansionTile(
@@ -68,32 +68,33 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                   children: [
                     ListTile(
                       title: Text(
-                          'Exercícios: ${session['exercicios'].toString()}'),
+                          'Exercícios: ${exercicios.length.toString()}'),
                     ),
                   ],
                 ),
-                //ExpansionTile(
-                  //title: const Text('Final'),
-                  //children: [
-                    //ListTile(
-                      //title: Text(
-                          //'Frequência Cardíaca: ${finalSessao['freqCardiacaFinal'].toString()}'),
-                    //),
-                    //ListTile(
-                      //title: Text(
-                          //'SpO2: ${finalSessao['spo2Final'].toString()}'),
-                    //),
-                    //ListTile(
-                      //title: Text('PA: ${finalSessao['paFinal'].toString()}'),
-                    //),
-                    //ListTile(
-                      //title: Text('PSE: ${finalSessao['pseFinal'].toString()}'),
-                    //),
-                    //ListTile(
-                      //title: Text(
-                          //'Dor Torácica: ${finalSessao['dorToracicaFinal'].toString()}'),
-                    //),
-                  //],
+                ExpansionTile(
+                  title: const Text('Final'),
+                  children: [
+                    ListTile(
+                      title: Text(
+                          'Frequência Cardíaca: ${finalSessao['freqCardiacaFinal'].toString()}'),
+                    ),
+                    ListTile(
+                      title:
+                          Text('SpO2: ${finalSessao['spo2Final'].toString()}'),
+                    ),
+                    ListTile(
+                      title: Text('PA: ${finalSessao['paFinal'].toString()}'),
+                    ),
+                    ListTile(
+                      title: Text('PSE: ${finalSessao['pseFinal'].toString()}'),
+                    ),
+                    ListTile(
+                      title: Text(
+                          'Dor Torácica: ${finalSessao['dorToracicaFinal'].toString()}'),
+                    ),
+                  ],
+                ),
               ],
             );
           } else {
