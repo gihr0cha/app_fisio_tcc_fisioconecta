@@ -76,7 +76,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
           .child(sessionKey); // Referência da sessão no banco de dados
 
       sessionRef.update({
-        'Parameters Final': healthParametersFinal,
+        'final_sessao': healthParametersFinal,
       }); // Atualiza os parâmetros de saúde final no banco de dados com os dados inseridos pelo fisioterapeuta
       _controller.nextPage(
           duration: const Duration(milliseconds: 500), curve: Curves.ease);

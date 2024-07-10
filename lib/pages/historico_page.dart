@@ -1,3 +1,4 @@
+import 'package:app_fisio_tcc/pages/detalhesessao.dart';
 import 'package:app_fisio_tcc/pages/navegation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -26,24 +27,25 @@ class _HistoricoPageState extends State<HistoricoPage> {
           if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
             Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
             List<dynamic> sessoes = map.entries.map((entry) {
+              // Mapeia os dados da sessão para uma lista
               return {
                 "key": entry.key,
                 ...entry.value,
-              };
+              }; // Retorna a chave e os valores da sessão 
             }).toList();
 
             return ListView.builder(
-              itemCount: sessoes.length,
+              itemCount: sessoes.length, // Número de sessões disponíveis
               itemBuilder: (context, index) {
-                var sessaoData = sessoes[index];
-                String sessaoKey = sessaoData['key'];
+                var sessaoData = sessoes[index]; // Dados da sessão
+                String sessaoKey = sessaoData['key']; // Chave da sessão
                
 
                 String nomePaciente = sessaoKey.split(
                     ' ')[0]; 
                 String dataSessao = sessaoKey.split(
                     ' ')[2];
-                // Simplificação, considera apenas o primeiro nome
+                // Simplificação, considera apenas o primeiro nome e a data da sessão
 
                 return ListTile(
                   title: Text(
@@ -59,7 +61,14 @@ class _HistoricoPageState extends State<HistoricoPage> {
                     ),
                   ),
                   onTap: () {
-                    //abrir detalhes da sessão
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetalhesSessaoPage(
+                          sessaoKey: sessaoKey,
+                        ),
+                      ),
+                    );
                   },
                 );
               },
