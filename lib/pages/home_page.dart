@@ -16,14 +16,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final database = FirebaseDatabase.instance;
-    final fisio =
-        'fisioterapeutas/${FirebaseAuth.instance.currentUser!.displayName}';
+    final nome = (user?.displayName ?? '').split(' ')[0];
 
-    var nome = user?.displayName ?? '';
-    nome = nome.split(' ')[0];
-
-    var scaffold3 = Scaffold(
+    return Scaffold(
       backgroundColor: AppColors.green2,
       appBar: AppBar(
         backgroundColor: const Color(0xff4a9700),
@@ -67,18 +62,10 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16.0),
         decoration: const BoxDecoration(
           color: AppColors.whiteApp,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-            bottomLeft: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(18)),
         ),
       ),
       bottomNavigationBar: const NavigacaoBar(),
     );
-    var scaffold2 = scaffold3;
-    var scaffold = scaffold2;
-    return scaffold;
   }
 }
