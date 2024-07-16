@@ -66,10 +66,12 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                 ExpansionTile(
                   title: const Text('Exercícios'),
                   children: [
-                    ListTile(
-                      title: Text(
-                          'Exercícios: ${exercicios.length.toString()}'),
-                    ),
+                    for (var key in exercicios.keys)
+                      ListTile(
+                        title: Text(
+                          '$key: ${exercicios[key]['series']} séries, pesos: ${exercicios[key]['weights'].join(', ')}',
+                        ),
+                      ),
                   ],
                 ),
                 ExpansionTile(
