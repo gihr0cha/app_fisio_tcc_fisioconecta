@@ -69,7 +69,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                     for (var key in exercicios.keys)
                       ListTile(
                         title: Text(
-                          '$key: ${exercicios[key]['series']} séries, pesos: ${exercicios[key]['weights'].join(', ')}',
+                          '$key: pesos: ${exercicios[key]['weights'].join(', ')}',
                         ),
                       ),
                   ],

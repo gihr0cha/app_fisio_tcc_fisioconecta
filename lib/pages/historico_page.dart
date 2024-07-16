@@ -41,8 +41,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
                 String sessaoKey = sessaoData['key']; // Chave da sessão
                
 
-                String nomePaciente = sessaoKey.split(
-                    ' ')[0]; 
+                String nomePaciente = '${sessaoKey.split(
+                    ' ')[0]} ${sessaoKey.split(' ')[1]}'; 
                 String dataSessao = sessaoKey.split(
                     ' ')[2];
                 // Simplificação, considera apenas o primeiro nome e a data da sessão
