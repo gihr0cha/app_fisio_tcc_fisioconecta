@@ -15,8 +15,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
   @override
   Widget build(BuildContext context) {
     FirebaseDatabase database = FirebaseDatabase.instance;
-  final user = FirebaseAuth.instance.currentUser;
-   final fisio = user?.displayName ?? '';
+    final user = FirebaseAuth.instance.currentUser;
+    final fisio = user?.displayName ?? '';
 
     return Scaffold(
       backgroundColor: Colors.green,

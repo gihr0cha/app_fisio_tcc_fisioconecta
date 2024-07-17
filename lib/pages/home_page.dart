@@ -51,13 +51,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.go('/registerPacients');
-        },
-        backgroundColor: const Color(0xff4a9700),
-        child: const Icon(Icons.add),
-      ),
       body: Container(
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(16.0),
