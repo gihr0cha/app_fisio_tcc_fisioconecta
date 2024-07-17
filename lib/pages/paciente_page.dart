@@ -1,3 +1,5 @@
+import 'package:app_fisio_tcc/pages/editpaciente.dart';
+
 import 'fieldsinicial.dart';
 import 'navegation_page.dart';
 import 'registerPacients_page.dart';
@@ -89,7 +91,19 @@ class _PacientePageState extends State<PacientePage> {
                                     FieldsInicial(paciente: patientData)));
                       },
                       child: ListTile(
-                        title: Text(nome)
+                        title: Text(nome),
+                        trailing: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditPaciente(pacienteData: patientData)));
+                          },
+                        ),
+
+                            
                       ),
                     );
                   } catch (e) {
