@@ -22,6 +22,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
@@ -39,7 +40,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: Colors.grey),
+                  color: Colors.white),
             ),
           ],
         ),
@@ -78,19 +79,19 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                     // O nome do exercício é obtido do mapa formatado e exibido em um ListTile
                     var exercicioData = formattedMap.values.toList()[index];
                     String nome = exercicioData;
-                    String key = formattedMap.keys.toList()[index]; // Chave do exercício
+                    String key =
+                        formattedMap.keys.toList()[index]; // Chave do exercício
 
                     return ListTile(
-                      title: Text(nome),
-                      trailing: IconButton(
-                        // O IconButton é usado para exibir um ícone de exclusão ao lado do exercício
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          // Remove o exercício do banco de dados Firebase Realtime Database
-                          database.ref('exercicios/$key').remove();
-                        },
-                      )
-                    );
+                        title: Text(nome),
+                        trailing: IconButton(
+                          // O IconButton é usado para exibir um ícone de exclusão ao lado do exercício
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            // Remove o exercício do banco de dados Firebase Realtime Database
+                            database.ref('exercicios/$key').remove();
+                          },
+                        ));
                   } catch (e) {
                     print(e);
                     return const SizedBox

@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.green2,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff4a9700),
         title: Column(
           children: [

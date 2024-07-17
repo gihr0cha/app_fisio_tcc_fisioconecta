@@ -24,6 +24,7 @@ class _PacientePageState extends State<PacientePage> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
@@ -98,12 +99,10 @@ class _PacientePageState extends State<PacientePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditPaciente(pacienteData: patientData)));
+                                    builder: (context) => EditPaciente(
+                                        pacienteData: patientData)));
                           },
                         ),
-
-                            
                       ),
                     );
                   } catch (e) {
