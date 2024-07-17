@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf/pdf.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -120,45 +121,59 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
     );
   }
 
-Future<void> gerarECompartilharPDF() async {
-    final pdf = pw.Document();
-    final database = FirebaseDatabase.instance;
-    final sessionRef = database.ref().child('sessoes').child(widget.sessaoKey);
-    final snapshot = await sessionRef.once();
-    final inicioSessao = Map<String, dynamic>.from(snapshot.snapshot.value as Map);
+  Future<void> gerarECompartilharPDF() async {
+    try {
+      final pdf = pw.Document();
+      final myCustomFont =
+          await rootBundle.load("fonts/MyCustomFont-Regular.ttf");
+      final ttf = pw.Font.ttf(myCustomFont);
+      final database = FirebaseDatabase.instance;
+      final sessionRef =
+          database.ref().child('sessoes').child(widget.sessaoKey);
+      final snapshot = await sessionRef.once();
+      final inicioSessao =
+          Map<String, dynamic>.from(snapshot.snapshot.value as Map);
 
-    pdf.addPage(
-      pw.MultiPage(
-        build: (context) {
+      pdf.addPage(
+        pw.MultiPage(build: (context) {
           return [
             pw.Header(level: 0, child: pw.Text("Detalhes da Sessão")),
             pw.Paragraph(text: "Sessão: ${widget.sessaoKey}"),
             pw.Paragraph(text: "Início da Sessão:"),
-
-            pw.Bullet(text: "Paciente sentiu dor: ${inicioSessao['dor'] == true ? 'Sim' : 'Não'}"),
-            pw.Bullet(text: "Frequência Cardíaca: ${inicioSessao['freqCardiacaInicial'].toString()}"),
+            pw.Bullet(
+                text:
+                    "Paciente sentiu dor: ${inicioSessao['dor'] == true ? 'Sim' : 'Não'}"),
+            pw.Bullet(
+                text:
+                    "Frequência Cardíaca: ${inicioSessao['freqCardiacaInicial'].toString()}"),
             pw.Bullet(text: "SpO2: ${inicioSessao['spo2Inicial'].toString()}"),
             pw.Bullet(text: "PA: ${inicioSessao['paInicial'].toString()}"),
             pw.Bullet(text: "PSE: ${inicioSessao['pseInicial'].toString()}"),
-            pw.Bullet(text: "Dor Torácica: ${inicioSessao['dorToracicaInicial'].toString()}"),
-
+            pw.Bullet(
+                text:
+                    "Dor Torácica: ${inicioSessao['dorToracicaInicial'].toString()}"),
             pw.Paragraph(text: "Exercícios:"),
             for (var key in inicioSessao['exercicios'].keys)
-              pw.Bullet(text: "$key: pesos: ${inicioSessao['exercicios'][key]['weights'].join(', ')}"),
-          pw.Paragraph(text: "Final da Sessão:"),
-          pw.Bullet(text: "Frequência Cardíaca: ${inicioSessao['freqCardiacaFinal'].toString()}"),
-          pw.Bullet(text: "SpO2: ${inicioSessao['spo2Final'].toString()}"),
-          pw.Bullet(text: "PA: ${inicioSessao['paFinal'].toString()}"),
-          pw.Bullet(text: "PSE: ${inicioSessao['pseFinal'].toString()}"),
-          pw.Bullet(text: "Dor Torácica: ${inicioSessao['dorToracicaFinal'].toString()}"),
-
+              pw.Bullet(
+                  text:
+                      "$key: pesos: ${inicioSessao['exercicios'][key]['weights'].join(', ')}"),
+            pw.Paragraph(text: "Final da Sessão:"),
+            pw.Bullet(
+                text:
+                    "Frequência Cardíaca: ${inicioSessao['freqCardiacaFinal'].toString()}"),
+            pw.Bullet(text: "SpO2: ${inicioSessao['spo2Final'].toString()}"),
+            pw.Bullet(text: "PA: ${inicioSessao['paFinal'].toString()}"),
+            pw.Bullet(text: "PSE: ${inicioSessao['pseFinal'].toString()}"),
+            pw.Bullet(
+                text:
+                    "Dor Torácica: ${inicioSessao['dorToracicaFinal'].toString()}"),
           ];
-
-          
-        },
-      ),
-    );
-
-    await Printing.sharePdf(bytes: await pdf.save(), filename: 'detalhes_sessao.pdf');
+        }),
+      );
+      final file = File('detalhes_sessao${widget.sessaoKey}.pdf');
+      await file.writeAsBytes(await pdf.save());
+    } catch (e) {
+      print(e);
+    }
   }
 }
