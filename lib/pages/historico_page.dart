@@ -17,7 +17,6 @@ class _HistoricoPageState extends State<HistoricoPage> {
     FirebaseDatabase database = FirebaseDatabase.instance;
     final user = FirebaseAuth.instance.currentUser;
     final fisio = user?.displayName ?? '';
-
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -64,6 +63,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
               }; // Retorna a chave e os valores da sessão
             }).toList();
 
+            
+
             return ListView.builder(
               itemCount: sessoes.length, // Número de sessões disponíveis
               itemBuilder: (context, index) {
@@ -74,6 +75,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                     '${sessaoKey.split(' ')[0]} ${sessaoKey.split(' ')[1]}';
                 String dataSessao = sessaoKey.split(' ')[2];
                 // Simplificação, considera apenas o primeiro nome e a data da sessão
+
 
                 return ListTile(
                   title: Text(
@@ -110,5 +112,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
       ),
       bottomNavigationBar: const NavigacaoBar(),
     );
+    
   }
+
+
 }
