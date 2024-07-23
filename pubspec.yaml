@@ -39,11 +39,11 @@ dependencies:
   firebase_auth: ^4.18.0
   firebase_core: ^2.27.2
   firebase_database: ^10.5.3
-  fl_chart: ^0.68.0
   pdf: ^3.11.0
-  printing: ^5.12.0
   google_fonts: ^6.2.1
-
+  path_provider: ^2.1.3
+  printing: ^5.12.0
+  
 
 dev_dependencies:
   flutter_test:

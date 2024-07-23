@@ -1,11 +1,8 @@
-import 'dart:typed_data';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:google_fonts/google_fonts.dart';
+import 'package:printing/printing.dart';
 
 class DetalhesSessaoPage extends StatefulWidget {
   final String sessaoKey;
@@ -25,14 +22,6 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(sessaoKey),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.print),
-            onPressed: () {
-              gerarECompartilharPDF();
-            },
-          ),
-        ],
       ),
       body: StreamBuilder<DatabaseEvent>(
         stream: sessionRef.onValue,
@@ -113,6 +102,18 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                     ),
                   ],
                 ),
+                IconButton(
+                  icon: const Icon(Icons.print),
+                  onPressed: () {
+                    gerarECompartilharPDF([
+                      {
+                        'Início': inicioSessao,
+                        'Exercícios': exercicios,
+                        'Final': finalSessao,
+                      }
+                    ]);
+                  },
+                ),
               ],
             );
           } else {
@@ -123,112 +124,44 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
     );
   }
 
-  Future<void> gerarECompartilharPDF() async {
+  Future<void> gerarECompartilharPDF(List<dynamic> dadosListView) async {
     try {
       final pdf = pw.Document();
-      // Load the font data
-      final fontData =
-          await rootBundle.load('assets/fonts/OpenSans-Regular.ttf');
-      // Correctly create a font from the ByteData
-      final ttf = pw.Font.ttf(fontData.buffer.asByteData());
+      
 
-      final database = FirebaseDatabase.instance;
-      final sessionRef =
-          database.ref().child('sessoes').child(widget.sessaoKey);
-      final snapshot = await sessionRef.once();
-      final inicioSessao =
-          Map<String, dynamic>.from(snapshot.snapshot.value as Map);
-
-      pdf.addPage(
-        pw.MultiPage(
-          build: (context) {
-            return [
+      pdf.addPage(pw.Page(
+        build: (context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // Cabeçalho do PDF
               pw.Header(
-                level: 0,
-                child: pw.Text(
-                  "Detalhes da Sessão",
-                  style: pw.TextStyle(font: ttf),
-                ),
-              ),
-              pw.Paragraph(
-                text: "Sessão: ${widget.sessaoKey}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Paragraph(
-                text: "Início da Sessão:",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text:
-                    "Paciente sentiu dor: ${inicioSessao['dor'] == true ? 'Sim' : 'Não'}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text:
-                    "Frequência Cardíaca: ${inicioSessao['freqCardiacaInicial'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "SpO2: ${inicioSessao['spo2Inicial'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "PA: ${inicioSessao['paInicial'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "PSE: ${inicioSessao['pseInicial'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text:
-                    "Dor Torácica: ${inicioSessao['dorToracicaInicial'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Paragraph(
-                text: "Exercícios:",
-                style: pw.TextStyle(font: ttf),
-              ),
-              for (var key in inicioSessao['exercicios'].keys)
-                pw.Bullet(
-                  text:
-                      "$key: pesos: ${inicioSessao['exercicios'][key]['weights'].join(', ')}",
-                  style: pw.TextStyle(font: ttf),
-                ),
-              pw.Paragraph(
-                text: "Final da Sessão:",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text:
-                    "Frequência Cardíaca: ${inicioSessao['freqCardiacaFinal'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "SpO2: ${inicioSessao['spo2Final'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "PA: ${inicioSessao['paFinal'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text: "PSE: ${inicioSessao['pseFinal'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-              pw.Bullet(
-                text:
-                    "Dor Torácica: ${inicioSessao['dorToracicaFinal'].toString()}",
-                style: pw.TextStyle(font: ttf),
-              ),
-            ];
-          },
-        ),
-      );
-
-      final file = File('detalhes_sessao${widget.sessaoKey}.pdf');
-      await file.writeAsBytes(await pdf.save());
-    } catch (e) {
+                  level: 0,
+                  child: pw.Text("Detalhes da Sessão",
+                      style: const pw.TextStyle(fontSize: 18))),
+              // Corpo do PDF com uma função de loop para iterar sobre os dados
+              for (var dados in dadosListView)
+                for (var key in dados.keys)
+                  pw.Column(
+                    children: [
+                      pw.Header(
+                          level: 1,
+                          child: pw.Text(key,
+                              style: const pw.TextStyle(
+                                  fontSize: 16, color: PdfColors.blue))),
+                      for (var subKey in dados[key].keys)
+                        pw.Bullet(
+                            text: "$subKey: ${dados[key][subKey].toString()}"),
+                    ],
+                  ),
+            ],
+          );
+        },
+      ));
+      final bytes = await pdf.save();
+      await Printing.sharePdf(
+          bytes: bytes, filename: 'detalhes_sessao_${widget.sessaoKey}.pdf');
+    } on Exception catch (e) {
       print(e);
     }
   }
