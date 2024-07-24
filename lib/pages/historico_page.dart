@@ -1,4 +1,4 @@
-import 'package:app_fisio_tcc/pages/detalhesessao.dart';
+import 'package:app_fisio_tcc/widgets/detalhesessao.dart';
 import 'package:app_fisio_tcc/widgets/navegation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

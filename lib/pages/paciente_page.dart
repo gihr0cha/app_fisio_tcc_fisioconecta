@@ -1,4 +1,4 @@
-import 'package:app_fisio_tcc/pages/editpaciente.dart';
+import 'package:app_fisio_tcc/widgets/editpaciente.dart';
 import 'package:app_fisio_tcc/widgets/fieldsInicial.dart';
 import '../widgets/navegation.dart';
 import 'registerPacients_page.dart';
