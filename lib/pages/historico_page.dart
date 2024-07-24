@@ -24,25 +24,13 @@ class _HistoricoPageState extends State<HistoricoPage> {
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
-           Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'FisioConecta - Histórico',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                      color: Colors.white),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white),
-                  onPressed: () {
-                    // Implement your search logic here
-                  },
-                ),
-              ],
+            const Text(
+              'FisioConecta - Histórico',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 22,
+                  color: Colors.white),
             ),
             Text(
               'Olá, $fisio',

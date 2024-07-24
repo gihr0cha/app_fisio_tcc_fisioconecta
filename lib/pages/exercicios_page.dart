@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-
 class ExerciciosPage extends StatefulWidget {
   const ExerciciosPage({super.key});
 
@@ -13,6 +12,10 @@ class ExerciciosPage extends StatefulWidget {
 }
 
 class _ExerciciosPageState extends State<ExerciciosPage> {
+  String filter = ''; // Variável para armazenar o texto de pesquisa
+  bool _isTextFieldVisible = false;
+  // Variável para controlar a visibilidade do TextField
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -23,12 +26,13 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
+        // O AppBar é usado para exibir o cabeçalho da página
         automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-         Row(
+            Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -43,11 +47,30 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                 IconButton(
                   icon: const Icon(Icons.search, color: Colors.white),
                   onPressed: () {
-                    // Implement your search logic here
+                    setState(() {
+                      _isTextFieldVisible =
+                          !_isTextFieldVisible; // Toggle visibility
+                    });
                   },
                 ),
               ],
             ),
+            if (_isTextFieldVisible)
+              // O TextField é usado para permitir que o usuário pesquise exercícios
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    filter = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Filtrar exercícios',
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+                
+                style: const TextStyle(color: Colors.white),
+              ),
+
             Text(
               'Olá, $fisio',
               textAlign: TextAlign.center,
@@ -86,12 +109,22 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                 formattedMap[key.toString()] = value;
               });
               // O ListView.builder é usado para exibir a lista de exercícios
+              
+              var filteredList = formattedMap.values
+                  .where((exercicio) => exercicio.toString()
+                      .toLowerCase()
+                      .contains(filter.toLowerCase()))
+                  .toList();
+
               return ListView.builder(
-                itemCount: formattedMap.length,
+                
+                shrinkWrap: true,
+                // O shrinkWrap é definido como true para que o ListView se ajuste ao tamanho do conteúdo
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
                   try {
                     // O nome do exercício é obtido do mapa formatado e exibido em um ListTile
-                    var exercicioData = formattedMap.values.toList()[index];
+                    var exercicioData = filteredList[index];
                     String nome = exercicioData;
                     String key =
                         formattedMap.keys.toList()[index]; // Chave do exercício

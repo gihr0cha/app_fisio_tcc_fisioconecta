@@ -14,12 +14,17 @@ class PacientePage extends StatefulWidget {
 }
 
 class _PacientePageState extends State<PacientePage> {
+  String filter = ''; // Variável para armazenar o texto de pesquisa
+  bool _isTextFieldVisible = false; // Variável para controlar a visibilidade
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     final fisio = user?.displayName ?? '';
+    // Variável para armazenar o nome do fisioterapeuta logado
+
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -28,6 +33,7 @@ class _PacientePageState extends State<PacientePage> {
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Cabeçalho do AppBar com o nome do aplicativo e um ícone de pesquisa
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,12 +48,31 @@ class _PacientePageState extends State<PacientePage> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.search, color: Colors.white),
+                  // Ícone de pesquisa que ao ser clicado altera a visibilidade do TextField
                   onPressed: () {
-                    // Implement your search logic here
+                    setState(() {
+                      _isTextFieldVisible =
+                          !_isTextFieldVisible; // Toggle visibility
+                    });
                   },
                 ),
               ],
             ),
+            if (_isTextFieldVisible) // Conditionally render the TextField
+              TextField(
+                onChanged: (value) {
+                  setState(() {
+                    filter = value;
+
+                    // Update the filter variable
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Filtrar por nome',
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+                style: const TextStyle(color: Colors.white),
+              ),
             Text(
               'Olá, $fisio',
               textAlign: TextAlign.center,
@@ -79,20 +104,27 @@ class _PacientePageState extends State<PacientePage> {
       body: StreamBuilder(
           stream: database.ref().child('pacientes').onValue,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            print(snapshot);
             if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
               Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
               Map<String, dynamic> formattedMap = {};
-              print(snapshot);
+
               map.forEach((key, value) {
                 formattedMap[key.toString()] = value;
               });
 
+              var filteredList = formattedMap.values
+                  .where((patient) => patient['nome']
+                      .toString()
+                      .toLowerCase()
+                      .contains(filter.toLowerCase()))
+                  .toList();
+
               return ListView.builder(
-                itemCount: formattedMap.length,
+                shrinkWrap: true,
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
                   try {
-                    var patientData = formattedMap.values.toList()[index];
+                    var patientData = filteredList[index];
                     String nome = patientData['nome'];
 
                     return InkWell(
@@ -106,7 +138,7 @@ class _PacientePageState extends State<PacientePage> {
                       child: ListTile(
                         title: Text(nome),
                         trailing: IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () {
                             Navigator.push(
                                 context,
@@ -115,10 +147,11 @@ class _PacientePageState extends State<PacientePage> {
                                         pacienteData: patientData)));
                           },
                         ),
+                        leading: const Icon(Icons.person),
                       ),
                     );
                   } catch (e) {
-                    print(e);
+                    showAboutDialog(context: context, applicationName: 'Erro');
                     return const ListTile(
                       title: Text('Erro'),
                       subtitle: Text('Nenhum dado cadastrado'),
