@@ -1,17 +1,13 @@
 import 'package:app_fisio_tcc/widgets/fieldsFinal.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class FieldsExercicio extends StatefulWidget {
   final dynamic paciente;
   final dynamic sessionKey;
 
   const FieldsExercicio(
-      {Key? key,
-      required this.paciente,
-      required this.sessionKey}) // Construtor
-      : super(key: key);
+      {super.key, required this.paciente, required this.sessionKey});
 
   @override
   _FieldsExercicioState createState() => _FieldsExercicioState();
@@ -62,9 +58,13 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
       _controllers.length =
           _numOfSeries; // Redefine o tamanho da lista de controladores
 
-      print('Dados salvos com sucesso!');
+      setState(() {});
     } else {
-      print('Por favor, selecione um exercício.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selecione um exercício!'),
+        ),
+      );
     }
   }
 
@@ -108,7 +108,6 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                   },
                 );
               } else {
-                print(snapshot);
                 return const CircularProgressIndicator(); // Retorna um indicador de progresso se não houver dados disponíveis
               }
             },
@@ -145,10 +144,8 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
             ),
           ElevatedButton(
             onPressed: () {
-              print(_selectedExercise);
-              print(_numOfSeries);
-
-              // Ensure _controllers has enough elements
+              // Adiciona mais controladores de texto à lista ao pressionar o botão Adicionar exercício
+              
               while (_controllers.length < _numOfSeries) {
                 _controllers.add(TextEditingController(
                   text: _controllers[_controllers.length - 1].text,

@@ -11,35 +11,51 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>(); // Chave do formulário para validação dos campos
-  String? _email; 
+  final formKey =
+      GlobalKey<FormState>(); // Chave do formulário para validação dos campos
+  String? _email;
   String? _password;
-  String? erroMessage; 
+  String? erroMessage;
 
   bool validateAndSave() {
     // O método validateAndSave verifica se o formulário é válido e salva os dados no estado do widget
     final form = formKey.currentState;
     if (form!.validate()) {
-      print("Form is valid");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login validado'),
+        ),
+      );
       form.save();
       return true;
     } else {
-      print("Form is invalid");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao validar o login'),
+        ),
+      );
       return false;
     }
   }
 
-  void validateAndSubmit() async { 
+  void validateAndSubmit() async {
     // O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, faz login no Firebase Authentication
     try {
       if (validateAndSave()) {
-        UserCredential user = await FirebaseAuth.instance // Faz login no Firebase Authentication
-            .signInWithEmailAndPassword(email: _email!, password: _password!); // Email e senha do usuário para login
-        print("Usuário logado: ${user.user!.uid}"); // Imprime o ID do usuário logado no console
-        context.go('/home');
+        UserCredential user = await FirebaseAuth
+            .instance // Faz login no Firebase Authentication
+            .signInWithEmailAndPassword(
+                email: _email!,
+                password: _password!); // Email e senha do usuário para login
+        ScaffoldMessenger(
+            child: Text(
+                'usuario logado: ${user.user!.uid}')); // Imprime o ID do usuário logado no console
+        mounted
+            ? context.go('/home')
+            : null; // Navega para a página home se o widget estiver montado
       }
     } catch (e) {
-      if (e is FirebaseAuthException) { 
+      if (e is FirebaseAuthException) {
         // Verifica se a exceção é do tipo FirebaseAuthException e exibe uma mensagem de erro adequada
         switch (e.code) {
           case "user-not-found":
@@ -50,11 +66,11 @@ class _LoginPageState extends State<LoginPage> {
             break;
           default:
             erroMessage = 'Erro';
-            print(e);
+            rethrow; // Propaga o erro para o Flutter mostrar na tela
         }
       } else {
         erroMessage = 'Erro';
-        print(e);
+        rethrow; // Propaga o erro para o Flutter mostrar na tela
       }
       mensagem(context, erroMessage);
     }
@@ -77,17 +93,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: Stack(
         alignment: FractionalOffset.center,
-        // O widget Stack permite empilhar widgets uns sobre os outros 
+        // O widget Stack permite empilhar widgets uns sobre os outros
         children: [
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-
                 colors: [AppColors.greenApp, AppColors.gradienteBaixo],
               ),
             ),
@@ -127,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       // O TextFormField é um campo de texto que valida o email inserido pelo usuário
                       TextFormField(
-                        style:
-                            AppTheme.themeData.inputDecorationTheme.labelStyle, // Estilo do campo de texto
+                        style: AppTheme.themeData.inputDecorationTheme
+                            .labelStyle, // Estilo do campo de texto
                         validator: (value) =>
                             value!.isEmpty ? 'Campo obrigatório' : null,
                         onSaved: (value) => _email = value,

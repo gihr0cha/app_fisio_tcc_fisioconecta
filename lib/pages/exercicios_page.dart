@@ -147,16 +147,16 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                             },
                           ));
                     } catch (e) {
-                      print(e);
-                      return const SizedBox
-                          .shrink(); // Return an empty widget if there's an error
+                      
+                      return ScaffoldMessenger(child: Text(e.toString()));
+                      
                     }
                   },
                 ),
               );
             } else {
-              print(snapshot);
               return const CircularProgressIndicator();
+              
             }
           }),
       bottomNavigationBar: const NavigacaoBar(),

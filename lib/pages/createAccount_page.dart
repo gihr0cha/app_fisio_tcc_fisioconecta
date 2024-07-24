@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +44,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'nome': _name,
         'pacientes': {}  // Inicialmente, o fisioterapeuta não tem pacientes associados
       });
-        context.go('/home');
+        if (mounted) {
+          context.go('/home');
+        }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           erroMessage = 'A senha fornecida é muito fraca';
@@ -57,6 +58,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         }
         mensagem(context, erroMessage);
       } catch (e) {
+        
         erroMessage = 'Erro desconhecido';
       }
     }
@@ -213,15 +215,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 // A função mensagem exibe uma mensagem de erro na tela
   void mensagem(BuildContext context, String? erroMessage) {
-    final snackBar = SnackBar(
-      content: Text(erroMessage!),
-      action: SnackBarAction(
-        label: 'Fechar',
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    if (mounted) {
+      final snackBar = SnackBar(
+        content: Text(erroMessage!),
+        action: SnackBarAction(
+          label: 'Fechar',
+          onPressed: () {
+            if (mounted) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            }
+          },
+        ),
+      );
+      if (mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+      }
+    }
   }
 }

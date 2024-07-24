@@ -1,6 +1,6 @@
 import 'pages/login_page.dart';
 import 'package:flutter/material.dart';
-import 'pages/createAccount_page.dart';
+import 'pages/createaccount_page.dart';
 import 'pages/home_page.dart';
 import 'pages/paciente_page.dart';
 import 'pages/exercicios_page.dart';
@@ -17,7 +17,7 @@ void main() async {
         options: DefaultFirebaseOptions.currentPlatform);
     runApp(const MyApp());
   } catch (e) {
-    e;
+    rethrow; // Propaga o erro para o Flutter mostrar na tela
   }
   runApp(const MyApp());
 }

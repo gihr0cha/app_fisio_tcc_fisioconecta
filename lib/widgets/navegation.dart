@@ -6,12 +6,12 @@ class NavigacaoBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _selectedIndex = ValueNotifier<int>(0); 
+    final selectedIndex = ValueNotifier<int>(0); 
     // Valor inicial do índice selecionado na barra de navegação
 
     return ValueListenableBuilder<int>(
       // O ValueListenableBuilder é um widget que reconstrói a interface do usuário sempre que o valor do ValueListenable muda
-      valueListenable: _selectedIndex,
+      valueListenable: selectedIndex,
       builder: (context, value, child) {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -20,7 +20,7 @@ class NavigacaoBar extends StatelessWidget {
           unselectedItemColor: Colors.green[700],
           currentIndex: value,
           onTap: (int index) {
-            _selectedIndex.value = index;
+            selectedIndex.value = index;
 // Atualiza o índice selecionado na barra de navegação com o índice do item selecionado pelo usuário 
             switch (index) {
               case 0:

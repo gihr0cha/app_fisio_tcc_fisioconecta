@@ -28,8 +28,11 @@ class _RegisterPacientsState extends State<RegisterPacients> {
     final form = _formKey.currentState;
     if (form!.validate()) {
       form.save();
-      print(nomepaciente);
-      print(datanascimentopaciente);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Paciente salvo com sucesso!'),
+        ),
+      );
       return true;
     } else {
       return false;
@@ -56,8 +59,6 @@ class _RegisterPacientsState extends State<RegisterPacients> {
           .child(fisioId)
           .child('pacientes')
           .update({newPatientRef.key!: true});
-
-      print(database);
     }
   }
 

@@ -64,7 +64,11 @@ class _FieldsFinalState extends State<FieldsFinal> {
       form.save();
       return true;
     } else {
-      print('Formulário não salvo');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao validar o formulário'),
+        ),
+      );
       return false;
     }
   }

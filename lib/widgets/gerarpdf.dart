@@ -22,6 +22,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
               // Corpo do PDF com uma função de loop para iterar sobre os dados
               for (var dados in dadosListView)
                 for (var key in dados.keys)
+                  if (key == 'Início')
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
@@ -172,6 +173,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
       await Printing.sharePdf(
           bytes: bytes, filename: 'detalhes_sessao_$sessaoKey.pdf');
     } on Exception catch (e) {
-      print(e);
+      pw.Text(e.toString());
+      rethrow; // Rethrow para que a exceção seja tratada no método de chamada
     }
-  }
+    }
