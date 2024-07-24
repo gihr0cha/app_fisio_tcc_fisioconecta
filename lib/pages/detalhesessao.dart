@@ -74,7 +74,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                     for (var key in exercicios.keys)
                       ListTile(
                         title: Text(
-                          '$key: pesos: ${exercicios[key]['weights'].join(', ')}',
+                          '$key: series: ${exercicios[key]['weights'].join(', ')}',
                         ),
                       ),
                   ],
@@ -127,7 +127,6 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
   Future<void> gerarECompartilharPDF(List<dynamic> dadosListView) async {
     try {
       final pdf = pw.Document();
-      
 
       pdf.addPage(pw.Page(
         build: (context) {
@@ -137,21 +136,137 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
               // Cabeçalho do PDF
               pw.Header(
                   level: 0,
-                  child: pw.Text("Detalhes da Sessão",
+                  child: pw.Text("Detalhes da Sessão: ${widget.sessaoKey}",
                       style: const pw.TextStyle(fontSize: 18))),
               // Corpo do PDF com uma função de loop para iterar sobre os dados
               for (var dados in dadosListView)
                 for (var key in dados.keys)
                   pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
+                      // Início
                       pw.Header(
                           level: 1,
-                          child: pw.Text(key,
+                          child: pw.Text("Início",
                               style: const pw.TextStyle(
                                   fontSize: 16, color: PdfColors.blue))),
-                      for (var subKey in dados[key].keys)
-                        pw.Bullet(
-                            text: "$subKey: ${dados[key][subKey].toString()}"),
+                      pw.Bullet(
+                          text:
+                              "Paciente sentiu dor: ${dados['Início']['dor'] == true ? 'Sim' : 'Não'}"),
+                      pw.Bullet(
+                          text:
+                              "Dor Torácica Inicial: ${dados['Início']['dorToracicaInicial']}"),
+                      pw.Bullet(
+                          text:
+                              "Frequência Cardíaca Inicial: ${dados['Início']['freqCardiacaInicial']}"),
+                      pw.Bullet(
+                          text: "PA Inicial: ${dados['Início']['paInicial']}"),
+                      pw.Bullet(
+                          text:
+                              "PSE Inicial: ${dados['Início']['pseInicial']}"),
+                      pw.Bullet(
+                          text:
+                              "SpO2 Inicial: ${dados['Início']['spo2Inicial']}"),
+
+                      // Exercícios
+                      pw.Header(
+                        level: 1,
+                        child: pw.Text("Exercícios",
+                            style: const pw.TextStyle(
+                                fontSize: 16, color: PdfColors.blue)),
+                      ),
+                      pw.Table(
+                        border: pw.TableBorder.all(),
+                        columnWidths: <int, pw.TableColumnWidth>{
+                          0: const pw.FlexColumnWidth(),
+                          1: const pw.FixedColumnWidth(100),
+                        },
+                        children: [
+                          // Cabeçalho da tabela de exercícios
+                          pw.TableRow(
+                            children: [
+                              pw.Padding(
+                                padding: const pw.EdgeInsets.all(5),
+                                child: pw.Text(
+                                  'Exercício',
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold),
+                                  textAlign: pw.TextAlign.center,
+                                ),
+                              ),
+                              // Encontrar o maior número de séries entre todos os exercícios
+                              for (int i = 0;
+                                  i <
+                                      dados['Exercícios']
+                                          .values
+                                          .map((e) => e['weights'].length)
+                                          .reduce((a, b) => a > b ? a : b);
+                                  i++)
+                                pw.Padding(
+                                  padding: const pw.EdgeInsets.all(5),
+                                  child: pw.Text(
+                                    'Série: ${i + 1}',
+                                    style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold),
+                                    textAlign: pw.TextAlign.center,
+                                  ),
+                                ),
+                            ],
+                          ),
+
+                          // Adicionando linhas de exercícios após o cabeçalho
+                          for (var exercicio in dados['Exercícios'].keys)
+                            pw.TableRow(
+                              children: [
+                                pw.Padding(
+                                  padding: const pw.EdgeInsets.all(5),
+                                  child: pw.Text(exercicio),
+                                ),
+                                // Adicionando séries de pesos para cada exercício 
+                                for (int i = 0;
+                                    i <
+                                        dados['Exercícios']
+                                            .values
+                                            .map((e) => e['weights'].length)
+                                            .reduce((a, b) => a > b ? a : b);
+                                    i++)
+                                  pw.Padding(
+                                    padding: const pw.EdgeInsets.all(5),
+                                    // Verificando se a série de pesos existe para o exercício
+                                    child: pw.Text(
+                                      i <
+                                              dados['Exercícios'][exercicio]
+                                                      ['weights']
+                                                  .length
+                                          ? dados['Exercícios'][exercicio]
+                                                  ['weights'][i]
+                                              .toString()
+                                          : 'null',
+                                      textAlign: pw.TextAlign.center,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                        ],
+                      ),
+
+                      // Final
+                      pw.Header(
+                          level: 1,
+                          child: pw.Text("Final",
+                              style: const pw.TextStyle(
+                                  fontSize: 16, color: PdfColors.blue))),
+                      pw.Bullet(
+                          text:
+                              "Dor Torácica Final: ${dados['Final']['dorToracicaFinal']}"),
+                      pw.Bullet(
+                          text:
+                              "Frequência Cardíaca Final: ${dados['Final']['freqCardiacaFinal']}"),
+                      pw.Bullet(text: "PA Final: ${dados['Final']['paFinal']}"),
+                      pw.Bullet(
+                          text: "PSE Final: ${dados['Final']['pseFinal']}"),
+                      pw.Bullet(
+                          text: "SpO2 Final: ${dados['Final']['spo2Final']}"),
                     ],
                   ),
             ],
