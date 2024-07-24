@@ -17,10 +17,10 @@ class _HomePageState extends State<HomePage> {
     final nome = (user?.displayName ?? '').split(' ')[0];
 
     return Scaffold(
-      backgroundColor: AppColors.green2,
+      backgroundColor: Colors.green,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xff4a9700),
+        backgroundColor: Colors.green,
         title: Column(
           children: [
             const Text(
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(16.0),
         decoration: const BoxDecoration(
-          color: AppColors.whiteApp,
+          color: Colors.white70,
           borderRadius: BorderRadius.all(Radius.circular(18)),
         ),
       ),

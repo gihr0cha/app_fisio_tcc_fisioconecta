@@ -65,43 +65,52 @@ class _HistoricoPageState extends State<HistoricoPage> {
 
             
 
-            return ListView.builder(
-              itemCount: sessoes.length, // Número de sessões disponíveis
-              itemBuilder: (context, index) {
-                var sessaoData = sessoes[index]; // Dados da sessão
-                String sessaoKey = sessaoData['key']; // Chave da sessão
-
-                String nomePaciente =
-                    '${sessaoKey.split(' ')[0]} ${sessaoKey.split(' ')[1]}';
-                String dataSessao = sessaoKey.split(' ')[2];
-                // Simplificação, considera apenas o primeiro nome e a data da sessão
-
-
-                return ListTile(
-                  title: Text(
-                    'Sessão com $nomePaciente',
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  subtitle: Text(
-                    'Data: $dataSessao',
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetalhesSessaoPage(
-                          sessaoKey: sessaoKey,
-                        ),
+            return Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(16.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(18)),
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: sessoes.length, // Número de sessões disponíveis
+                itemBuilder: (context, index) {
+                  var sessaoData = sessoes[index]; // Dados da sessão
+                  String sessaoKey = sessaoData['key']; // Chave da sessão
+              
+                  String nomePaciente =
+                      '${sessaoKey.split(' ')[0]} ${sessaoKey.split(' ')[1]}';
+                  String dataSessao = sessaoKey.split(' ')[2];
+                  // Simplificação, considera apenas o primeiro nome e a data da sessão
+              
+              
+                  return ListTile(
+                    title: Text(
+                      'Sessão com $nomePaciente',
+                      style: const TextStyle(
+                        color: Colors.green,
                       ),
-                    );
-                  },
-                );
-              },
+                    ),
+                    subtitle: Text(
+                      'Data: $dataSessao',
+                      style: const TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalhesSessaoPage(
+                            sessaoKey: sessaoKey,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             );
           } else if (snapshot.hasError) {
             return const Text('Erro ao carregar dados');

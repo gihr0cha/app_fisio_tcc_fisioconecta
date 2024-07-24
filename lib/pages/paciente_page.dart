@@ -119,45 +119,54 @@ class _PacientePageState extends State<PacientePage> {
                       .contains(filter.toLowerCase()))
                   .toList();
 
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  try {
-                    var patientData = filteredList[index];
-                    String nome = patientData['nome'];
+              return Container(
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(16.0),
+                decoration: const BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    try {
+                      var patientData = filteredList[index];
+                      String nome = patientData['nome'];
 
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    FieldsInicial(paciente: patientData)));
-                      },
-                      child: ListTile(
-                        title: Text(nome),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditPaciente(
-                                        pacienteData: patientData)));
-                          },
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      FieldsInicial(paciente: patientData)));
+                        },
+                        child: ListTile(
+                          title: Text(nome),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EditPaciente(
+                                          pacienteData: patientData)));
+                            },
+                          ),
+                          leading: const Icon(Icons.person),
                         ),
-                        leading: const Icon(Icons.person),
-                      ),
-                    );
-                  } catch (e) {
-                    showAboutDialog(context: context, applicationName: 'Erro');
-                    return const ListTile(
-                      title: Text('Erro'),
-                      subtitle: Text('Nenhum dado cadastrado'),
-                    );
-                  }
-                },
+                      );
+                    } catch (e) {
+                      showAboutDialog(
+                          context: context, applicationName: 'Erro');
+                      return const ListTile(
+                        title: Text('Erro'),
+                        subtitle: Text('Nenhum dado cadastrado'),
+                      );
+                    }
+                  },
+                ),
               );
             } else {
               return const CircularProgressIndicator();

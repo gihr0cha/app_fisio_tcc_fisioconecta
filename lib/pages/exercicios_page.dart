@@ -1,4 +1,4 @@
-import 'package:app_fisio_tcc/pages/criarexercicio.dart';
+import 'package:app_fisio_tcc/widgets/criarexercicio.dart';
 import 'package:app_fisio_tcc/widgets/navegation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -116,35 +116,43 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                       .contains(filter.toLowerCase()))
                   .toList();
 
-              return ListView.builder(
+              return Container(
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(16.0),
+                decoration: const BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                ),
+                child: ListView.builder(
+                  
+                  shrinkWrap: true,
+                  // O shrinkWrap é definido como true para que o ListView se ajuste ao tamanho do conteúdo
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    try {
+                      // O nome do exercício é obtido do mapa formatado e exibido em um ListTile
+                      var exercicioData = filteredList[index];
+                      String nome = exercicioData;
+                      String key =
+                          formattedMap.keys.toList()[index]; // Chave do exercício
                 
-                shrinkWrap: true,
-                // O shrinkWrap é definido como true para que o ListView se ajuste ao tamanho do conteúdo
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) {
-                  try {
-                    // O nome do exercício é obtido do mapa formatado e exibido em um ListTile
-                    var exercicioData = filteredList[index];
-                    String nome = exercicioData;
-                    String key =
-                        formattedMap.keys.toList()[index]; // Chave do exercício
-
-                    return ListTile(
-                        title: Text(nome),
-                        trailing: IconButton(
-                          // O IconButton é usado para exibir um ícone de exclusão ao lado do exercício
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            // Remove o exercício do banco de dados Firebase Realtime Database
-                            database.ref('exercicios/$key').remove();
-                          },
-                        ));
-                  } catch (e) {
-                    print(e);
-                    return const SizedBox
-                        .shrink(); // Return an empty widget if there's an error
-                  }
-                },
+                      return ListTile(
+                          title: Text(nome),
+                          trailing: IconButton(
+                            // O IconButton é usado para exibir um ícone de exclusão ao lado do exercício
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              // Remove o exercício do banco de dados Firebase Realtime Database
+                              database.ref('exercicios/$key').remove();
+                            },
+                          ));
+                    } catch (e) {
+                      print(e);
+                      return const SizedBox
+                          .shrink(); // Return an empty widget if there's an error
+                    }
+                  },
+                ),
               );
             } else {
               print(snapshot);
