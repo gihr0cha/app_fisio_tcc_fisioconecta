@@ -1,6 +1,5 @@
 import 'package:app_fisio_tcc/pages/editpaciente.dart';
-
-import 'fieldsinicial.dart';
+import 'package:app_fisio_tcc/widgets/fieldsInicial.dart';
 import 'navegation_page.dart';
 import 'registerPacients_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';

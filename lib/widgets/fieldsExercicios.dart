@@ -1,4 +1,4 @@
-import 'package:app_fisio_tcc/pages/fieldsFinal.dart';
+import 'package:app_fisio_tcc/widgets/fieldsFinal.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
