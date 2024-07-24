@@ -218,6 +218,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                           for (var exercicio in dados['Exercícios'].keys)
                             pw.TableRow(
                               children: [
+                                // Adicionando nome do exercício
                                 pw.Padding(
                                   padding: const pw.EdgeInsets.all(5),
                                   child: pw.Text(exercicio),
@@ -230,7 +231,9 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                             .map((e) => e['weights'].length)
                                             .reduce((a, b) => a > b ? a : b);
                                     i++)
+                                    // Adicionando o peso da série
                                   pw.Padding(
+          
                                     padding: const pw.EdgeInsets.all(5),
                                     // Verificando se a série de pesos existe para o exercício
                                     child: pw.Text(
@@ -241,7 +244,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                           ? dados['Exercícios'][exercicio]
                                                   ['weights'][i]
                                               .toString()
-                                          : 'null',
+                                          : ' ',
                                       textAlign: pw.TextAlign.center,
                                     ),
                                   ),
