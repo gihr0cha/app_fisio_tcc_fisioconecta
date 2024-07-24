@@ -1,6 +1,6 @@
 import 'package:app_fisio_tcc/pages/editpaciente.dart';
 import 'package:app_fisio_tcc/widgets/fieldsInicial.dart';
-import 'navegation_page.dart';
+import '../widgets/navegation.dart';
 import 'registerPacients_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +26,27 @@ class _PacientePageState extends State<PacientePage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
         title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'FisioConecta - Pacientes',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.grey),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'FisioConecta - Pacientes',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      color: Colors.white),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.search, color: Colors.white),
+                  onPressed: () {
+                    // Implement your search logic here
+                  },
+                ),
+              ],
             ),
             Text(
               'Olá, $fisio',

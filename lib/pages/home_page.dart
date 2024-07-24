@@ -1,7 +1,7 @@
 import 'package:app_fisio_tcc/assets/colors/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'navegation_page.dart';
+import '../widgets/navegation.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key});

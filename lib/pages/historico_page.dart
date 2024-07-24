@@ -1,5 +1,5 @@
 import 'package:app_fisio_tcc/pages/detalhesessao.dart';
-import 'package:app_fisio_tcc/pages/navegation_page.dart';
+import 'package:app_fisio_tcc/widgets/navegation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -24,13 +24,25 @@ class _HistoricoPageState extends State<HistoricoPage> {
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
-            const Text(
-              'FisioConecta - Histórico',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.grey),
+           Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'FisioConecta - Histórico',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                      color: Colors.white),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.search, color: Colors.white),
+                  onPressed: () {
+                    // Implement your search logic here
+                  },
+                ),
+              ],
             ),
             Text(
               'Olá, $fisio',
