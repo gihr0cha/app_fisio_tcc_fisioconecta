@@ -157,6 +157,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
                       pw.Bullet(
                           text:
                               "Saturação Periférica de Oxigênio: ${dados['Final']['spo2Final']}"),
+                      if (dados['Final']['comentario'] != null)
                       pw.Annotation(
                         child: pw.Text(
                             "Comentários: ${dados['Final']['comentario']}"),
