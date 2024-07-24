@@ -25,9 +25,9 @@ class _FieldsInicialState extends State<FieldsInicial> {
       'label': 'Frequência Cardíaca',
       'validator': 'Por favor, insira a frequência cardíaca inicial'
     },
-    {'label': 'SpO2', 'validator': 'Por favor, insira o SpO2 inicial'},
-    {'label': 'PA', 'validator': 'Por favor, insira a PA inicial'},
-    {'label': 'PSE', 'validator': 'Por favor, insira a PSE inicial'},
+    {'label': 'Saturação Periférica de Oxigênio', 'validator': 'Por favor, insira o SpO2 inicial'},
+    {'label': 'Pressão Arterial', 'validator': 'Por favor, insira a PA inicial'},
+    {'label': 'Percepção Subjetiva de Esforço', 'validator': 'Por favor, insira a PSE inicial'},
     {
       'label': 'Dor Torácica',
       'validator': 'Por favor, insira a dor torácica inicial'

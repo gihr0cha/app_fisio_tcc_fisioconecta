@@ -42,15 +42,14 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
       DatabaseReference sessionRef =
           dbRef.child('sessoes').child(sessionKey).child('exercicios');
 
-      List<String> weights = []; // Lista de pesos
+      List<String> repeticao = []; // Lista de pesos
       for (int i = 0; i < _numOfSeries; i++) {
-        weights.add(_controllers[i].text); // Adiciona o peso da série à lista
+        repeticao.add(_controllers[i].text); // Adiciona o peso da série à lista
       }
 // O método update atualiza o nó do exercício com o número de séries e os pesos inseridos pelo fisioterapeuta
       sessionRef.update({
         _selectedExercise.toString(): {
-          'series': _numOfSeries,
-          'weights': weights,
+          'repeticao': repeticao,
         },
       });
 
@@ -141,7 +140,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
               keyboardType: TextInputType.number,
               controller: _controllers[i],
               decoration: InputDecoration(
-                labelText: 'Peso da série ${i + 1}',
+                labelText: 'Numero de repetições ${i + 1}',
               ),
             ),
           ElevatedButton(
@@ -160,12 +159,19 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                 print(_controllers[i].text);
               }
               validateAndSave();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Dados salvos com sucesso!')),
+              );
             },
-            child: const Text('Salvar'),
+            child: const Text('Adicionar exercicio'),
           ),
           // Navega para a página FieldsFinal ao pressionar o botão Continuar e passa os dados do paciente e a chave da sessão
           ElevatedButton(
             onPressed: () {
+              validateAndSave();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Dados salvos com sucesso!')),
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -176,7 +182,7 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
                 ),
               );
             },
-            child: const Text('Continuar'),
+            child: const Text('Salvar e continuar'),
           ),
         ],
       ),

@@ -30,13 +30,14 @@ class _FieldsFinalState extends State<FieldsFinal> {
       'label': 'Frequência Cardíaca',
       'validator': 'Por favor, insira a frequência cardíaca final'
     },
-    {'label': 'SpO2', 'validator': 'Por favor, insira o SpO2 final'},
-    {'label': 'PA', 'validator': 'Por favor, insira a PA final'},
-    {'label': 'PSE', 'validator': 'Por favor, insira a PSE final'},
+    {'label': 'Saturação Periférica de Oxigênio', 'validator': 'Por favor, insira o SpO2 final'},
+    {'label': 'Pressão Arterial', 'validator': 'Por favor, insira a PA final'},
+    {'label': 'Percepção Subjetiva de Esforço', 'validator': 'Por favor, insira a PSE final'},
     {
       'label': 'Dor Torácica',
       'validator': 'Por favor, insira a dor torácica final'
     },
+    {'label': 'Comentarios', 'validator': 'Por favor, insira um comentário'},
   ];
 
   Map<String, dynamic> healthParametersFinal = {
@@ -46,6 +47,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
     'paFinal': null,
     'pseFinal': null,
     'dorToracicaFinal': null,
+    'comentario': null,
   };
 
   @override
@@ -102,17 +104,24 @@ class _FieldsFinalState extends State<FieldsFinal> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: AlertDialog(
+                title: const Text(
+                    'Insira os dados de saúde final'), // Título do AlertDialog
                 content: TextFormField(
                   decoration:
                       InputDecoration(labelText: _fieldsfinal[index]['label']),
-                  keyboardType: TextInputType
-                      .number, // Define o tipo de teclado como numérico
+                  keyboardType: index == _fieldsfinal.length - 1
+                      ? TextInputType.multiline
+                      : TextInputType.number,
+                  maxLines: index == _fieldsfinal.length - 1
+                      ? null
+                      : 1, // Define o tipo de teclado como numérico
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return _fieldsfinal[index][
-                          'validator']; // Valida o campo para garantir que não esteja vazio
+                    // Valida o campo para garantir que não esteja vazio (exceto para o campo de comentários)
+                    if (index != _fieldsfinal.length - 1 &&
+                        (value == null || value.isEmpty)) {
+                      return _fieldsfinal[index]['validator'];
                     }
-                    return null;
+                    return null; // Retorna null para indicar que não há erro
                   },
                   onChanged: (value) {
                     setState(() {
@@ -132,6 +141,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
                           break;
                         case 4:
                           healthParametersFinal['dorToracicaFinal'] = value;
+                          break;
+                        case 5:
+                          healthParametersFinal['comentario'] = value;
                           break;
                       }
                     });

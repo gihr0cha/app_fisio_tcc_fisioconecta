@@ -44,7 +44,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                   children: [
                     ListTile(
                       title: Text(
-                          'Paciente sentiu dor: ${inicioSessao['dor'] == true ? 'Sim' : 'Não'}'),
+                          'Paciente sentiu dor? ${inicioSessao['dor'] == true ? 'Sim' : 'Não'}'),
                     ),
                     ListTile(
                       title: Text(
@@ -52,15 +52,15 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                     ),
                     ListTile(
                       title: Text(
-                          'SpO2: ${inicioSessao['spo2Inicial'].toString()}'),
+                          'Saturação Periférica de Oxigênio: ${inicioSessao['spo2Inicial'].toString()}'),
                     ),
                     ListTile(
-                      title:
-                          Text('PA: ${inicioSessao['paInicial'].toString()}'),
+                      title: Text(
+                          'Pressão Arterial: ${inicioSessao['paInicial'].toString()}'),
                     ),
                     ListTile(
-                      title:
-                          Text('PSE: ${inicioSessao['pseInicial'].toString()}'),
+                      title: Text(
+                          'Percepção Subjetiva de Esforço: ${inicioSessao['pseInicial'].toString()}'),
                     ),
                     ListTile(
                       title: Text(
@@ -74,7 +74,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                     for (var key in exercicios.keys)
                       ListTile(
                         title: Text(
-                          '$key: series: ${exercicios[key]['weights'].join(', ')}',
+                          '$key: series: ${exercicios[key]['repeticao'].join(', ')}',
                         ),
                       ),
                   ],
@@ -87,18 +87,24 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                           'Frequência Cardíaca: ${finalSessao['freqCardiacaFinal'].toString()}'),
                     ),
                     ListTile(
-                      title:
-                          Text('SpO2: ${finalSessao['spo2Final'].toString()}'),
+                      title: Text(
+                          'Saturação Periférica de Oxigênio: ${finalSessao['spo2Final'].toString()}'),
                     ),
                     ListTile(
-                      title: Text('PA: ${finalSessao['paFinal'].toString()}'),
+                      title: Text(
+                          'Pressão Arterial: ${finalSessao['paFinal'].toString()}'),
                     ),
                     ListTile(
-                      title: Text('PSE: ${finalSessao['pseFinal'].toString()}'),
+                      title: Text(
+                          'Percepção Subjetiva de Esforço: ${finalSessao['pseFinal'].toString()}'),
                     ),
                     ListTile(
                       title: Text(
                           'Dor Torácica: ${finalSessao['dorToracicaFinal'].toString()}'),
+                    ),
+                    ListTile(
+                      title: Text(
+                          'Comentarios: ${finalSessao['comentario'].toString()}'),
                     ),
                   ],
                 ),
@@ -152,21 +158,22 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                   fontSize: 16, color: PdfColors.blue))),
                       pw.Bullet(
                           text:
-                              "Paciente sentiu dor: ${dados['Início']['dor'] == true ? 'Sim' : 'Não'}"),
+                              "Paciente sentiu dor? ${dados['Início']['dor'] == true ? 'Sim' : 'Não'}"),
                       pw.Bullet(
                           text:
-                              "Dor Torácica Inicial: ${dados['Início']['dorToracicaInicial']}"),
+                              "Dor Torácica: ${dados['Início']['dorToracicaInicial']}"),
                       pw.Bullet(
                           text:
-                              "Frequência Cardíaca Inicial: ${dados['Início']['freqCardiacaInicial']}"),
-                      pw.Bullet(
-                          text: "PA Inicial: ${dados['Início']['paInicial']}"),
+                              "Frequência Cardíaca: ${dados['Início']['freqCardiacaInicial']}"),
                       pw.Bullet(
                           text:
-                              "PSE Inicial: ${dados['Início']['pseInicial']}"),
+                              "Pressão Arterial: ${dados['Início']['paInicial']}"),
                       pw.Bullet(
                           text:
-                              "SpO2 Inicial: ${dados['Início']['spo2Inicial']}"),
+                              "Percepção Subjetiva de Esforço: ${dados['Início']['pseInicial']}"),
+                      pw.Bullet(
+                          text:
+                              "Saturação Periférica de Oxigênio: ${dados['Início']['spo2Inicial']}"),
 
                       // Exercícios
                       pw.Header(
@@ -185,6 +192,7 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                           // Cabeçalho da tabela de exercícios
                           pw.TableRow(
                             children: [
+                              // Adicionando nome do exercício
                               pw.Padding(
                                 padding: const pw.EdgeInsets.all(5),
                                 child: pw.Text(
@@ -199,10 +207,11 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                   i <
                                       dados['Exercícios']
                                           .values
-                                          .map((e) => e['weights'].length)
+                                          .map((e) => e['repeticao'].length)
                                           .reduce((a, b) => a > b ? a : b);
                                   i++)
                                 pw.Padding(
+                                  // Adicionando o número da série
                                   padding: const pw.EdgeInsets.all(5),
                                   child: pw.Text(
                                     'Série: ${i + 1}',
@@ -223,26 +232,25 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                   padding: const pw.EdgeInsets.all(5),
                                   child: pw.Text(exercicio),
                                 ),
-                                // Adicionando séries de pesos para cada exercício 
+                                // Adicionando séries de pesos para cada exercício
                                 for (int i = 0;
                                     i <
                                         dados['Exercícios']
                                             .values
-                                            .map((e) => e['weights'].length)
+                                            .map((e) => e['repeticao'].length)
                                             .reduce((a, b) => a > b ? a : b);
                                     i++)
-                                    // Adicionando o peso da série
+                                  // Adicionando o peso da série
                                   pw.Padding(
-          
                                     padding: const pw.EdgeInsets.all(5),
                                     // Verificando se a série de pesos existe para o exercício
                                     child: pw.Text(
                                       i <
                                               dados['Exercícios'][exercicio]
-                                                      ['weights']
+                                                      ['repeticao']
                                                   .length
                                           ? dados['Exercícios'][exercicio]
-                                                  ['weights'][i]
+                                                  ['repeticao'][i]
                                               .toString()
                                           : ' ',
                                       textAlign: pw.TextAlign.center,
@@ -261,15 +269,23 @@ class _DetalhesSessaoPageState extends State<DetalhesSessaoPage> {
                                   fontSize: 16, color: PdfColors.blue))),
                       pw.Bullet(
                           text:
-                              "Dor Torácica Final: ${dados['Final']['dorToracicaFinal']}"),
+                              "Dor Torácica: ${dados['Final']['dorToracicaFinal']}"),
                       pw.Bullet(
                           text:
                               "Frequência Cardíaca Final: ${dados['Final']['freqCardiacaFinal']}"),
-                      pw.Bullet(text: "PA Final: ${dados['Final']['paFinal']}"),
                       pw.Bullet(
-                          text: "PSE Final: ${dados['Final']['pseFinal']}"),
+                          text:
+                              "Pressão Arterial: ${dados['Final']['paFinal']}"),
                       pw.Bullet(
-                          text: "SpO2 Final: ${dados['Final']['spo2Final']}"),
+                          text:
+                              "Percepção Subjetiva de Esforço: ${dados['Final']['pseFinal']}"),
+                      pw.Bullet(
+                          text:
+                              "Saturação Periférica de Oxigênio: ${dados['Final']['spo2Final']}"),
+                      pw.Annotation(
+                        child: pw.Text(
+                            "Comentários: ${dados['Final']['comentario']}"),
+                      )
                     ],
                   ),
             ],
