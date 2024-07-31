@@ -21,7 +21,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
     final user = FirebaseAuth.instance.currentUser;
     FirebaseDatabase database = FirebaseDatabase.instance;
 
-    final fisio = user?.displayName ?? '';
+    final fisio = (user?.displayName ?? '').split(' ')[0];
 
     return Scaffold(
       backgroundColor: Colors.green,
@@ -67,10 +67,8 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                   hintText: 'Filtrar exercícios',
                   hintStyle: TextStyle(color: Colors.white),
                 ),
-                
                 style: const TextStyle(color: Colors.white),
               ),
-
             Text(
               'Olá, $fisio',
               textAlign: TextAlign.center,
@@ -109,9 +107,10 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                 formattedMap[key.toString()] = value;
               });
               // O ListView.builder é usado para exibir a lista de exercícios
-              
+
               var filteredList = formattedMap.values
-                  .where((exercicio) => exercicio.toString()
+                  .where((exercicio) => exercicio
+                      .toString()
                       .toLowerCase()
                       .contains(filter.toLowerCase()))
                   .toList();
@@ -124,7 +123,6 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                   borderRadius: BorderRadius.all(Radius.circular(18)),
                 ),
                 child: ListView.builder(
-                  
                   shrinkWrap: true,
                   // O shrinkWrap é definido como true para que o ListView se ajuste ao tamanho do conteúdo
                   itemCount: filteredList.length,
@@ -133,9 +131,9 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                       // O nome do exercício é obtido do mapa formatado e exibido em um ListTile
                       var exercicioData = filteredList[index];
                       String nome = exercicioData;
-                      String key =
-                          formattedMap.keys.toList()[index]; // Chave do exercício
-                
+                      String key = formattedMap.keys
+                          .toList()[index]; // Chave do exercício
+
                       return ListTile(
                           title: Text(nome),
                           trailing: IconButton(
@@ -147,16 +145,13 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                             },
                           ));
                     } catch (e) {
-                      
                       return ScaffoldMessenger(child: Text(e.toString()));
-                      
                     }
                   },
                 ),
               );
             } else {
               return const CircularProgressIndicator();
-              
             }
           }),
       bottomNavigationBar: const NavigacaoBar(),

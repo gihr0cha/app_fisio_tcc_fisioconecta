@@ -22,7 +22,8 @@ class _PacientePageState extends State<PacientePage> {
     final user = FirebaseAuth.instance.currentUser;
     FirebaseDatabase database = FirebaseDatabase.instance;
 
-    final fisio = user?.displayName ?? '';
+    final fisio = (user?.displayName ?? '').split(' ')[0];
+    final fisioId = user?.uid;
     // Variável para armazenar o nome do fisioterapeuta logado
 
     return Scaffold(
@@ -103,7 +104,9 @@ class _PacientePageState extends State<PacientePage> {
       ),
       body: StreamBuilder(
           stream: database.ref().child('pacientes').onValue,
+          // O StreamBuilder é usado para ouvir as mudanças no banco de dados Firebase Realtime Database
           builder: (BuildContext context, AsyncSnapshot snapshot) {
+            
             if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
               Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
               Map<String, dynamic> formattedMap = {};
@@ -116,7 +119,8 @@ class _PacientePageState extends State<PacientePage> {
                   .where((patient) => patient['nome']
                       .toString()
                       .toLowerCase()
-                      .contains(filter.toLowerCase()))
+                      .contains(filter.toLowerCase())
+                      && patient['fisioId'] == fisioId)
                   .toList();
 
               return Container(

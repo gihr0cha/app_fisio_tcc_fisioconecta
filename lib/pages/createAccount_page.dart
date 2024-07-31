@@ -35,12 +35,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _email!,
         password: _password!,
+
       );
       await userCredential.user!.updateDisplayName(_name);
       
       // Salva os dados do fisioterapeuta no Firebase Realtime Database
+      final personalizarId = '${_email!.split('@')[0]}_${userCredential.user!.uid}';
       DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-      dbRef.child('fisioterapeutas').child(userCredential.user!.uid).set({
+      dbRef.child('fisioterapeutas').child(personalizarId).set({
         'nome': _name,
         'pacientes': {}  // Inicialmente, o fisioterapeuta não tem pacientes associados
       });

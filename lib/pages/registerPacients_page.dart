@@ -44,16 +44,17 @@ class _RegisterPacientsState extends State<RegisterPacients> {
       // Cria um novo nó para o paciente sob 'pacientes'
       DatabaseReference dbRef = FirebaseDatabase.instance.ref();
       DatabaseReference newPatientRef = dbRef.child('pacientes').push();
+      String fisioId = FirebaseAuth.instance.currentUser!.uid;
 
       await newPatientRef.set({
         
         'nome': '$nomepaciente $sobrenomepaciente', // Concatena o nome e sobrenome
         'data_nascimento': datanascimentopaciente,
+        'fisioId': fisioId,
         'sessoes': {} // Inicialmente, o paciente não tem sessões associadas
       });
 
       // Adiciona o ID do paciente à lista de pacientes do fisioterapeuta
-      String fisioId = FirebaseAuth.instance.currentUser!.uid;
       dbRef
           .child('fisioterapeutas')
           .child(fisioId)
