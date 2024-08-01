@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../assets/theme_app.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,11 +20,6 @@ class _LoginPageState extends State<LoginPage> {
     // O método validateAndSave verifica se o formulário é válido e salva os dados no estado do widget
     final form = formKey.currentState;
     if (form!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login validado'),
-        ),
-      );
       form.save();
       return true;
     } else {
@@ -66,11 +60,11 @@ class _LoginPageState extends State<LoginPage> {
             break;
           default:
             erroMessage = 'Erro';
-            rethrow; // Propaga o erro para o Flutter mostrar na tela
+          // Propaga o erro para o Flutter mostrar na tela
         }
       } else {
         erroMessage = 'Erro';
-        rethrow; // Propaga o erro para o Flutter mostrar na tela
+        // Propaga o erro para o Flutter mostrar na tela
       }
       mensagem(context, erroMessage);
     }
@@ -82,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
       content: Text(erroMessage!),
       action: SnackBarAction(
         label: 'Fechar',
+        textColor: Colors.green,
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
@@ -99,11 +94,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.greenApp, AppColors.gradienteBaixo],
-              ),
+              color: Colors.green,
             ),
           ),
           Column(
@@ -140,9 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       // O TextFormField é um campo de texto que valida o email inserido pelo usuário
-                      TextFormField(
-                        style: AppTheme.themeData.inputDecorationTheme
-                            .labelStyle, // Estilo do campo de texto
+                      TextFormField( // Estilo do campo de texto
                         validator: (value) =>
                             value!.isEmpty ? 'Campo obrigatório' : null,
                         onSaved: (value) => _email = value,
@@ -155,8 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 24),
                       // O TextFormField é um campo de texto que valida a senha inserida pelo usuário
                       TextFormField(
-                        style:
-                            AppTheme.themeData.inputDecorationTheme.labelStyle,
+                        
                         validator: (value) =>
                             value!.isEmpty ? 'Campo obrigatório' : null,
                         onSaved: (value) => _password = value,
@@ -166,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Senha:',
                           hintText: 'Digite sua senha',
                         ),
-                        cursorColor: AppColors.greyApp,
+                        cursorColor: Colors.blue,
                       ),
                       const SizedBox(height: 50),
                       SizedBox(
@@ -175,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           onPressed: validateAndSubmit,
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.whiteApp,
+                              backgroundColor: Colors.white,
                               elevation: 3,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -183,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text(
                             'Entrar',
                             style: TextStyle(
-                                color: AppColors.greenApp,
+                                color: Colors.green,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600),
                           ),
@@ -195,7 +183,11 @@ class _LoginPageState extends State<LoginPage> {
                           const Text(
                             'Não possui uma conta?',
                             style: TextStyle(
-                                fontSize: 16, color: AppColors.greyApp),
+                                fontSize: 16, 
+                                color: Colors.black,
+                        
+                                ),
+
                           ),
                           // O TextButton é um botão de texto que, quando pressionado, navega para a página de criação de conta
                           TextButton(
@@ -203,8 +195,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Text(
                               'Clique aqui!',
                               style: TextStyle(
-                                color: AppColors.greyApp,
-                                fontSize: 16,
+                               fontSize: 16, 
+                                color: Colors.black,                      
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

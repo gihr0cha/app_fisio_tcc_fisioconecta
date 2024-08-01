@@ -2,7 +2,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import '../assets/theme_app.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -73,11 +72,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         children: [
           Container(
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppColors.greenApp, AppColors.gradienteBaixo],
+             color: Colors.green
               ),
             ),
-          ),
+      
           SingleChildScrollView(
             // O SingleChildScrollView permite que o conteúdo da tela seja rolável
             child: Column(
@@ -125,8 +123,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           onSaved: (value) => _name = value,
                           
                           textInputAction: TextInputAction.next,
-                          style: AppTheme
-                              .themeData.inputDecorationTheme.labelStyle,
                           decoration: const InputDecoration(
                             hintText: 'Digite seu nome',
                             labelText: 'Nome:',
@@ -139,8 +135,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               value!.isEmpty ? 'Campo obrigatório' : null,
                           onSaved: (value) => _email = value,
                           textInputAction: TextInputAction.next,
-                          style: AppTheme
-                              .themeData.inputDecorationTheme.labelStyle,
                           decoration: const InputDecoration(
                             hintText: 'Digite seu email',
                             labelText: 'E-mail:',
@@ -153,8 +147,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               value!.isEmpty ? 'Campo obrigatório' : null,
                           onSaved: (value) => _password = value,
                           textInputAction: TextInputAction.next,
-                          style: AppTheme
-                              .themeData.inputDecorationTheme.labelStyle,
                           obscureText: true,
                           decoration: const InputDecoration(
                             hintText: 'Digite sua senha',
@@ -169,7 +161,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           child: ElevatedButton(
                             onPressed: validateAndSubmit,
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.whiteApp,
+                                backgroundColor: Colors.white,
                                 elevation: 3,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -177,7 +169,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             child: const Text(
                               'Cadastrar',
                               style: TextStyle(
-                                  color: AppColors.greenApp,
+                                  color: Colors.green,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600),
                             ),
@@ -189,14 +181,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             const Text(
                               'Já possui uma conta?',
                               style: TextStyle(
-                                  fontSize: 16, color: AppColors.greyApp),
+                                  fontSize: 16, color: Colors.black),
                             ),
                             TextButton(
                               onPressed: () => context.go('/'),
                               child: const Text(
                                 'Entre!',
                                 style: TextStyle(
-                                  color: AppColors.greyApp,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                 ),

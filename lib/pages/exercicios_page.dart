@@ -28,7 +28,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
       appBar: AppBar(
         // O AppBar é usado para exibir o cabeçalho da página
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

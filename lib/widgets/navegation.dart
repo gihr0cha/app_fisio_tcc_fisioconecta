@@ -17,7 +17,7 @@ class NavigacaoBar extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: Colors.green[700],
-          unselectedItemColor: Colors.green[700],
+          unselectedItemColor: Colors.green,
           currentIndex: value,
           onTap: (int index) {
             selectedIndex.value = index;

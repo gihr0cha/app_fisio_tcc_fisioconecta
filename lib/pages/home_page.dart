@@ -1,4 +1,3 @@
-import 'package:app_fisio_tcc/assets/colors/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/navegation.dart';
@@ -37,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const LoginPage()));
                     },
                     icon: const Icon(Icons.logout),
-                    color: AppColors.whiteApp),
+                    color: Colors.white),
                 const SizedBox(width: 10),
                 const Text(
                   'FisioConecta - Home',
@@ -45,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 22,
-                      color: AppColors.whiteApp),
+                      color: Colors.white),
                 ),
               ],
             ),
@@ -55,7 +54,7 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: AppColors.whiteApp),
+                  color: Colors.white),
             ),
           ],
         ),
@@ -71,7 +70,7 @@ class _HomePageState extends State<HomePage> {
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(16.0),
         decoration: const BoxDecoration(
-          color: Colors.white70,
+          color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(18)),
         ),
         child: const Column(
@@ -83,7 +82,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 22,
-                  color: AppColors.greenApp),
+                  color: Colors.green),
             ),
             SizedBox(height: 20),
             Text(
@@ -92,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: AppColors.greenApp),
+                  color: Colors.green),
             ),
           ],
         ),
