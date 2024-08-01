@@ -33,7 +33,7 @@ class NavigacaoBar extends StatelessWidget {
                 context.go('/exercicios');
                 break;
               case 3:
-                context.go('/historico');
+                context.go('/evolucao');
                 break;
             }
           },
@@ -52,8 +52,8 @@ class NavigacaoBar extends StatelessWidget {
               label: 'Exercicios',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'Historico',
+              icon: Icon(Icons.timeline),
+              label: 'Evolução',
             ),
           ],
         );

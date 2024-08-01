@@ -1,3 +1,5 @@
+import 'package:app_fisio_tcc/pages/filtrarevolucao.dart';
+
 import 'pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'pages/createaccount_page.dart';
@@ -50,9 +52,9 @@ final GoRouter _router = GoRouter(routes: <RouteBase>[
               return const ExerciciosPage();
             }),
         GoRoute(
-            path: 'historico',
+            path: 'evolucao',
             builder: (BuildContext context, GoRouterState state) {
-              return const HistoricoPage();
+              return const FiltrarEvolucaoPage();
             }),
         GoRoute(
             path: 'registerPacients',

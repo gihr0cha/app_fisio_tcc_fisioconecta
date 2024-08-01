@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class HistoricoPage extends StatefulWidget {
-  const HistoricoPage({super.key});
+  final dynamic paciente;
+  const HistoricoPage({super.key, required this.paciente});
 
   @override
   State<HistoricoPage> createState() => _HistoricoPageState();
@@ -15,8 +16,11 @@ class _HistoricoPageState extends State<HistoricoPage> {
   @override
   Widget build(BuildContext context) {
     FirebaseDatabase database = FirebaseDatabase.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    final fisio = (user?.displayName ?? '').split(' ')[0];
+    final user = FirebaseAuth.instance.currentUser; // Usuário logado
+    final fisio = (user?.displayName ?? '').split(' ')[0]; // Variável para armazenar o nome do fisioterapeuta logado
+    final paciente = widget.paciente; // Dados do paciente
+    final filter = paciente['nome']; // Use o nome do paciente como filtro
+
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -24,10 +28,10 @@ class _HistoricoPageState extends State<HistoricoPage> {
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
-            const Text(
-              'FisioConecta - Histórico',
+            Text(
+              'Evolução - $filter',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 22,
                   color: Colors.white),
@@ -55,15 +59,17 @@ class _HistoricoPageState extends State<HistoricoPage> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
             Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-            List<dynamic> sessoes = map.entries.map((entry) {
-              // Mapeia os dados da sessão para uma lista
-              return {
-                "key": entry.key,
-                ...entry.value,
-              }; // Retorna a chave e os valores da sessão
-            }).toList();
+            Map<String, dynamic> formattedMap = {};
+            map.forEach((key, value) {
+              formattedMap[key.toString()] = value;
+            });
 
-            
+            var filteredList = formattedMap.entries
+                .where((entry) => entry.key
+                    .toString()
+                    .toLowerCase()
+                    .contains(filter.toLowerCase()))
+                .toList();
 
             return Container(
               margin: const EdgeInsets.all(10),
@@ -74,26 +80,26 @@ class _HistoricoPageState extends State<HistoricoPage> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: sessoes.length, // Número de sessões disponíveis
+                itemCount: filteredList.length, // Número de sessões disponíveis
                 itemBuilder: (context, index) {
-                  var sessaoData = sessoes[index]; // Dados da sessão
-                  String sessaoKey = sessaoData['key']; // Chave da sessão
-              
-                  String nomePaciente =
-                      '${sessaoKey.split(' ')[0]} ${sessaoKey.split(' ')[1]}';
-                  String dataSessao = sessaoKey.split(' ')[2];
-                  // Simplificação, considera apenas o primeiro nome e a data da sessão
-              
-              
+                  var sessaoEntry = filteredList[index]; // Dados da sessão
+                  String sessaoFilter = sessaoEntry.key; // Chave da sessão
+                  String dataSessao = sessaoFilter.split(' ')[2];
+                  String horaSessao = sessaoFilter.split(' ')[3]; // Data da sessão
+
                   return ListTile(
+                    leading: const Icon(
+                      Icons.calendar_today,
+                      color: Colors.green,
+                    ),
                     title: Text(
-                      'Sessão com $nomePaciente',
+                      'Data: $dataSessao',
                       style: const TextStyle(
                         color: Colors.green,
                       ),
                     ),
                     subtitle: Text(
-                      'Data: $dataSessao',
+                      horaSessao,
                       style: const TextStyle(
                         color: Colors.green,
                       ),
@@ -103,7 +109,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetalhesSessaoPage(
-                            sessaoKey: sessaoKey,
+                            sessaoKey: sessaoFilter,
                           ),
                         ),
                       );
@@ -121,8 +127,5 @@ class _HistoricoPageState extends State<HistoricoPage> {
       ),
       bottomNavigationBar: const NavigacaoBar(),
     );
-    
   }
-
-
 }
