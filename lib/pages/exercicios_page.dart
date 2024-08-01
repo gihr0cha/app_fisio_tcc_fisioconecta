@@ -28,7 +28,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
       appBar: AppBar(
         // O AppBar é usado para exibir o cabeçalho da página
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueAccent,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -119,7 +119,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
-                  color: Colors.white70,
+                  color: Colors.white10,
                   borderRadius: BorderRadius.all(Radius.circular(18)),
                 ),
                 child: ListView.builder(
@@ -135,10 +135,14 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
                           .toList()[index]; // Chave do exercício
 
                       return ListTile(
-                          title: Text(nome),
+
+                          title: Text(nome, style: const TextStyle(color: Colors.white)),
+                          hoverColor: Colors.blueAccent,
+                
                           trailing: IconButton(
                             // O IconButton é usado para exibir um ícone de exclusão ao lado do exercício
-                            icon: const Icon(Icons.delete),
+                            icon: const Icon(Icons.delete), 
+                            color: Colors.blueAccent,
                             onPressed: () {
                               // Remove o exercício do banco de dados Firebase Realtime Database
                               database.ref('exercicios/$key').remove();

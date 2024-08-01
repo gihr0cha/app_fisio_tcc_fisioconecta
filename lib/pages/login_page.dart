@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Senha:',
                           hintText: 'Digite sua senha',
                         ),
-                        cursorColor: Colors.blue,
+                        cursorColor: Colors.blueAccent,
                       ),
                       const SizedBox(height: 50),
                       SizedBox(

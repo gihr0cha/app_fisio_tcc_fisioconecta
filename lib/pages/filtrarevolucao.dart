@@ -71,7 +71,7 @@ class _FiltrarEvolucaoPageState extends State<FiltrarEvolucaoPage> {
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: Color(0xFFFFFFFF)),
+                  color: Colors.white),
             ),
           ],
         ),
@@ -104,7 +104,7 @@ class _FiltrarEvolucaoPageState extends State<FiltrarEvolucaoPage> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
-                  color: Colors.white70,
+                  color: Colors.white10,
                   borderRadius: BorderRadius.all(Radius.circular(18)),
                 ),
                 child: ListView.builder(

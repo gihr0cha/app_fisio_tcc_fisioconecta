@@ -127,7 +127,7 @@ class _PacientePageState extends State<PacientePage> {
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(16.0),
                 decoration: const BoxDecoration(
-                  color: Colors.white70,
+                  color: Colors.white10,
                   borderRadius: BorderRadius.all(Radius.circular(18)),
                 ),
                 child: ListView.builder(

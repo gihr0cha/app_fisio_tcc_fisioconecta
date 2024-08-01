@@ -31,7 +31,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
                           level: 1,
                           child: pw.Text("Início",
                               style: const pw.TextStyle(
-                                  fontSize: 16, color: PdfColors.blue))),
+                                  fontSize: 16, color: PdfColors.blueAccent))),
                       pw.Bullet(
                           text:
                               "Paciente sentiu dor? ${dados['Início']['dor'] == true ? 'Sim' : 'Não'}"),
@@ -56,7 +56,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
                         level: 1,
                         child: pw.Text("Exercícios",
                             style: const pw.TextStyle(
-                                fontSize: 16, color: PdfColors.blue)),
+                                fontSize: 16, color: PdfColors.blueAccent)),
                       ),
                       pw.Table(
                         border: pw.TableBorder.all(),
@@ -142,7 +142,7 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
                           level: 1,
                           child: pw.Text("Final",
                               style: const pw.TextStyle(
-                                  fontSize: 16, color: PdfColors.blue))),
+                                  fontSize: 16, color: PdfColors.blueAccent))),
                       pw.Bullet(
                           text:
                               "Dor Torácica: ${dados['Final']['dorToracicaFinal']}"),
