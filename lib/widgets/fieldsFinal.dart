@@ -92,8 +92,9 @@ class _FieldsFinalState extends State<FieldsFinal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blueAccent,
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 72,
@@ -105,7 +106,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
         title: Text(
             'Formulário de Saúde: ${widget.paciente}'), // Título da barra de aplicativos
       ),
-      backgroundColor: Colors.green,
+    
       body: Form(
         key: _formKey,
         child: PageView.builder(
@@ -117,6 +118,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: AlertDialog(
+                backgroundColor: Colors.white,
                  // Título do AlertDialog
                 content: TextFormField(
                   decoration:
@@ -166,14 +168,22 @@ class _FieldsFinalState extends State<FieldsFinal> {
                       _fieldsfinal.length -
                           1) // Adiciona um botão 'Próximo' se não for a última página
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
                       onPressed: () => _controller.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn,
                       ),
-                      child: const Text('Próximo'),
+                      child: const Text('Próximo',
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
                     ),
                   if (index == _fieldsfinal.length - 1)
                     ElevatedButton(
+                      
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
                       onPressed: () {
                         validateAndSubmit(); // Adiciona um botão 'Enviar' se for a última página
 
@@ -187,7 +197,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
                                 builder: (context) =>
                                     const HomePage())); // Volta para HomePage após enviar os dados
                       },
-                      child: const Text('Enviar'),
+                      child: const Text('Enviar', style: TextStyle(fontSize: 20, color: Colors.white)),
                     ),
                 ],
               ),

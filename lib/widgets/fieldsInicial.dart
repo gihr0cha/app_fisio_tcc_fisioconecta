@@ -102,8 +102,9 @@ class _FieldsInicialState extends State<FieldsInicial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green,
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blueAccent,
         centerTitle: true,
         elevation: 0,
         toolbarHeight: 72,
@@ -113,19 +114,27 @@ class _FieldsInicialState extends State<FieldsInicial> {
           ),
         ),
         title: Text(
-          
             'Formulário de Saúde: ${widget.paciente['nome']}'), // Título da barra de aplicativos com o nome do paciente
       ),
-      body: Form(
-        key: _formKey,
-        child: PageView.builder(
-          controller: _controller,
-          itemCount: _fieldsinicial
-              .length, // Número de páginas do PageView igual ao número de campos do formulário
-          itemBuilder: (context, index) {
-            return buildField(context,
-                index); // Cria um AlertDialog com um campo de texto para cada campo do formulário
-          },
+      body: Container(
+        decoration: const BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+        ),
+        child: Form(
+          key: _formKey,
+          child: PageView.builder(
+            controller: _controller,
+            itemCount: _fieldsinicial
+                .length, // Número de páginas do PageView igual ao número de campos do formulário
+            itemBuilder: (context, index) {
+              return buildField(context,
+                  index); // Cria um AlertDialog com um campo de texto para cada campo do formulário
+            },
+          ),
         ),
       ),
     );
@@ -136,32 +145,36 @@ class _FieldsInicialState extends State<FieldsInicial> {
       // Caso específico para o índice 0 (dor)
       return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            CheckboxListTile(
-              activeColor: Colors.green,
-              checkColor: Colors.white,
-              controlAffinity: ListTileControlAffinity.leading,
-              title: const Text('Paciente apresenta dor?'),
-              value: healthParametersinicial['dor'],
-              onChanged: (bool? value) {
-                setState(() {
-                  healthParametersinicial['dor'] = value;
-                });
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+        child: AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              CheckboxListTile(
+                activeColor: Colors.green,
+                checkColor: Colors.white,
+                controlAffinity: ListTileControlAffinity.leading,
+                title: const Text('Paciente apresenta dor?'),
+                value: healthParametersinicial['dor'],
+                onChanged: (bool? value) {
+                  setState(() {
+                    healthParametersinicial['dor'] = value;
+                  });
+                },
               ),
-              onPressed: () => _controller.nextPage(
-
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeIn,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                onPressed: () => _controller.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                ),
+                child: const Text('Próximo',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
-              child: const Text('Próximo', style: TextStyle(fontSize: 20, color: Colors.white)),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     } else {
@@ -169,7 +182,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: AlertDialog(
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.white,
           content: TextFormField(
             decoration:
                 InputDecoration(labelText: _fieldsinicial[index]['label']),
@@ -216,10 +229,14 @@ class _FieldsInicialState extends State<FieldsInicial> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 ),
-                child: const Text('Próximo', style: TextStyle(fontSize: 20, color: Colors.blueAccent)),
+                child: const Text('Próximo',
+                    style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
             if (index == _fieldsinicial.length - 1)
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Valida o formulário antes de enviar
@@ -231,7 +248,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
                     );
                   }
                 },
-                child: const Text('Enviar'),
+                child: const Text('Enviar', style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
           ],
         ),
