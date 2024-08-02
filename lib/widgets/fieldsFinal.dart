@@ -93,6 +93,15 @@ class _FieldsFinalState extends State<FieldsFinal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 72,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
         title: Text(
             'Formulário de Saúde: ${widget.paciente}'), // Título da barra de aplicativos
       ),
@@ -108,8 +117,7 @@ class _FieldsFinalState extends State<FieldsFinal> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: AlertDialog(
-                title: const Text(
-                    'Insira os dados de saúde final'), // Título do AlertDialog
+                 // Título do AlertDialog
                 content: TextFormField(
                   decoration:
                       InputDecoration(labelText: _fieldsfinal[index]['label']),

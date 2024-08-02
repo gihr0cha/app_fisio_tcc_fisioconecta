@@ -103,7 +103,17 @@ class _FieldsInicialState extends State<FieldsInicial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 72,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
         title: Text(
+          
             'Formulário de Saúde: ${widget.paciente['nome']}'), // Título da barra de aplicativos com o nome do paciente
       ),
       body: Form(
@@ -129,6 +139,9 @@ class _FieldsInicialState extends State<FieldsInicial> {
         child: Column(
           children: [
             CheckboxListTile(
+              activeColor: Colors.green,
+              checkColor: Colors.white,
+              controlAffinity: ListTileControlAffinity.leading,
               title: const Text('Paciente apresenta dor?'),
               value: healthParametersinicial['dor'],
               onChanged: (bool? value) {
@@ -138,11 +151,15 @@ class _FieldsInicialState extends State<FieldsInicial> {
               },
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
               onPressed: () => _controller.nextPage(
+
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeIn,
               ),
-              child: const Text('Próximo'),
+              child: const Text('Próximo', style: TextStyle(fontSize: 20, color: Colors.white)),
             ),
           ],
         ),
@@ -152,6 +169,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: AlertDialog(
+          backgroundColor: Colors.green,
           content: TextFormField(
             decoration:
                 InputDecoration(labelText: _fieldsinicial[index]['label']),
@@ -191,11 +209,14 @@ class _FieldsInicialState extends State<FieldsInicial> {
             // Adiciona um botão 'Próximo' se não for a última página e um botão 'Enviar' se for a última página
             if (index < _fieldsinicial.length - 1)
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
                 onPressed: () => _controller.nextPage(
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeIn,
                 ),
-                child: const Text('Próximo'),
+                child: const Text('Próximo', style: TextStyle(fontSize: 20, color: Colors.blueAccent)),
               ),
             if (index == _fieldsinicial.length - 1)
               ElevatedButton(

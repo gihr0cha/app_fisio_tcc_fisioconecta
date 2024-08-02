@@ -71,6 +71,19 @@ class _FieldsExercicioState extends State<FieldsExercicio> {
   @override
   Widget build(BuildContext context) {
     var scaffold = Scaffold(
+      appBar: AppBar(
+         backgroundColor: Colors.green,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 72,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
+        title: const Text('Exercícios'),
+
+      ),
       backgroundColor: Colors.green,
       body: ListView(
         padding: const EdgeInsets.all(8.0),
