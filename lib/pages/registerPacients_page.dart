@@ -47,8 +47,8 @@ class _RegisterPacientsState extends State<RegisterPacients> {
       String fisioId = FirebaseAuth.instance.currentUser!.uid;
 
       await newPatientRef.set({
-        
-        'nome': '$nomepaciente $sobrenomepaciente', // Concatena o nome e sobrenome
+        'nome':
+            '$nomepaciente $sobrenomepaciente', // Concatena o nome e sobrenome
         'data_nascimento': datanascimentopaciente,
         'fisioId': fisioId,
         'sessoes': {} // Inicialmente, o paciente não tem sessões associadas
@@ -65,45 +65,72 @@ class _RegisterPacientsState extends State<RegisterPacients> {
 
   @override
   Widget build(BuildContext context) {
-    final nome = user?.displayName ?? '';
+    final nome = (user?.displayName ?? '').split(' ')[0];
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 72,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
         title: Text('Bem-vindo $nome'),
       ),
-      body: Form(
-        key: _formKey,
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Nome do Paciente',
-              ),
-              validator: (value) => value!.isEmpty ? 'inválido' : null,
-              onSaved: (newValue) => nomepaciente = newValue,
+            const Text(
+              'Cadastrar Paciente',
+              style: TextStyle(fontSize: 24, color: Colors.green),
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Sobrenome do Paciente',
-              ),
-              validator: (value) => value!.isEmpty ? 'inválido' : null,
-              onSaved: (newValue) => sobrenomepaciente = newValue,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.datetime,
-              decoration: const InputDecoration(
-                hintText: 'data de nascimento',
-                
-              ),
-              validator: (value) => value!.isEmpty ? 'inválido' : null,
-              onSaved: (newValue) => datanascimentopaciente = newValue,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: validateAndSubmit,
-                child: const Text('Enviar'),
+            Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                verticalDirection: VerticalDirection.down,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Nome do Paciente',
+                    ),
+                    validator: (value) => value!.isEmpty ? 'inválido' : null,
+                    onSaved: (newValue) => nomepaciente = newValue,
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      hintText: 'Sobrenome do Paciente',
+                    ),
+                    validator: (value) => value!.isEmpty ? 'inválido' : null,
+                    onSaved: (newValue) => sobrenomepaciente = newValue,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.datetime,
+                    decoration: const InputDecoration(
+                      hintText: 'data de nascimento',
+                    ),
+                    validator: (value) => value!.isEmpty ? 'inválido' : null,
+                    onSaved: (newValue) => datanascimentopaciente = newValue,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: validateAndSubmit,
+                      child: const Text('Enviar',
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

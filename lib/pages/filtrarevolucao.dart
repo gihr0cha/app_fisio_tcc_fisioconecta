@@ -116,6 +116,7 @@ class _FiltrarEvolucaoPageState extends State<FiltrarEvolucaoPage> {
                       String nome = patientData['nome'];
 
                       return InkWell(
+  
                         onTap: () {
                           Navigator.push(
                               context,
@@ -123,7 +124,7 @@ class _FiltrarEvolucaoPageState extends State<FiltrarEvolucaoPage> {
                                   builder: (context) =>
                                       HistoricoPage(paciente: patientData)));
                         },
-                        child: ListTile(title: Text(nome),trailing: const Icon(Icons.arrow_forward_ios),),
+                        child: ListTile(title: Text(nome, style: const TextStyle(fontSize: 18, color: Colors.white)),trailing: const Icon(Icons.arrow_forward_ios, color: Colors.blueAccent),),
                       );
                     } catch (e) {
                       showAboutDialog(

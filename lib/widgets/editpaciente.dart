@@ -15,6 +15,8 @@ class _EditPacienteState extends State<EditPaciente> {
   String? sobrenomepaciente;
   String? datanascimentopaciente;
 
+
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +51,16 @@ class _EditPacienteState extends State<EditPaciente> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Paciente'),
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        elevation: 0,
+        toolbarHeight: 72,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(25),
+          ),
+        ),
+        title: const Text('Editar Paciente', style: TextStyle(color: Colors.white)),
       ),
       body: Form(
         key: _formKey,
@@ -84,8 +95,11 @@ class _EditPacienteState extends State<EditPaciente> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
                 onPressed: validateAndSubmit,
-                child: const Text('Atualizar'),
+                child: const Text('Atualizar', style: TextStyle(fontSize: 20, color: Colors.white)),
               ),
             ),
           ],

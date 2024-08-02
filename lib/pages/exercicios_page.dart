@@ -26,6 +26,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
+        centerTitle: true,
         // O AppBar é usado para exibir o cabeçalho da página
         automaticallyImplyLeading: false,
         backgroundColor: Colors.blueAccent,
@@ -80,19 +81,21 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
           ],
         ),
         toolbarHeight: 72,
-        centerTitle: true,
         shape: const RoundedRectangleBorder(
+
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(25),
+
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const CriarExercicio()));
         },
-        backgroundColor: const Color(0xff4a9700),
+        backgroundColor: Colors.blueAccent,
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder(

@@ -24,7 +24,13 @@ class _HistoricoPageState extends State<HistoricoPage> {
     return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: Colors.blueAccent,
         title: Column(
           children: [
@@ -125,7 +131,6 @@ class _HistoricoPageState extends State<HistoricoPage> {
           }
         },
       ),
-      bottomNavigationBar: const NavigacaoBar(),
     );
   }
 }

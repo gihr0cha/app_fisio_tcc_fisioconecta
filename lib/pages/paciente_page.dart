@@ -80,7 +80,7 @@ class _PacientePageState extends State<PacientePage> {
               style: const TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: Color(0xFFFFFFFF)),
+                  color: Colors.white),
             ),
           ],
         ),
@@ -93,20 +93,20 @@ class _PacientePageState extends State<PacientePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => const RegisterPacients()));
         },
-        backgroundColor: const Color(0xff4a9700),
+        backgroundColor: Colors.blueAccent,
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder(
           stream: database.ref().child('pacientes').onValue,
           // O StreamBuilder é usado para ouvir as mudanças no banco de dados Firebase Realtime Database
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            
             if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
               Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
               Map<String, dynamic> formattedMap = {};
@@ -116,11 +116,12 @@ class _PacientePageState extends State<PacientePage> {
               });
 
               var filteredList = formattedMap.values
-                  .where((patient) => patient['nome']
-                      .toString()
-                      .toLowerCase()
-                      .contains(filter.toLowerCase())
-                      && patient['fisioId'] == fisioId)
+                  .where((patient) =>
+                      patient['nome']
+                          .toString()
+                          .toLowerCase()
+                          .contains(filter.toLowerCase()) &&
+                      patient['fisioId'] == fisioId)
                   .toList();
 
               return Container(
@@ -139,6 +140,7 @@ class _PacientePageState extends State<PacientePage> {
                       String nome = patientData['nome'];
 
                       return InkWell(
+                        
                         onTap: () {
                           Navigator.push(
                               context,
@@ -147,9 +149,13 @@ class _PacientePageState extends State<PacientePage> {
                                       FieldsInicial(paciente: patientData)));
                         },
                         child: ListTile(
-                          title: Text(nome),
+                          leading: const Icon(Icons.person,
+                              color: Colors.white),
+                          title: Text(nome,
+                              style: const TextStyle(
+                                  fontSize: 18, color: Colors.white)),
                           trailing: IconButton(
-                            icon: const Icon(Icons.edit),
+                            icon: const Icon(Icons.edit, color: Colors.blueAccent),
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -158,7 +164,6 @@ class _PacientePageState extends State<PacientePage> {
                                           pacienteData: patientData)));
                             },
                           ),
-                          leading: const Icon(Icons.person),
                         ),
                       );
                     } catch (e) {
