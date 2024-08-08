@@ -6,7 +6,6 @@ import 'pages/createaccount_page.dart';
 import 'pages/home_page.dart';
 import 'pages/paciente_page.dart';
 import 'pages/exercicios_page.dart';
-import 'pages/historico_page.dart';
 import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';

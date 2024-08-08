@@ -2,27 +2,25 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
+Future<void> gerarECompartilharPDF(
+    String sessaoKey, List<dynamic> dadosListView) async {
+  try {
+    final pdf = pw.Document();
 
-Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView)
-  async {
-
-    try {
-      final pdf = pw.Document();
-
-      pdf.addPage(pw.Page(
-        build: (context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              // Cabeçalho do PDF
-              pw.Header(
-                  level: 0,
-                  child: pw.Text("Detalhes da Sessão: $sessaoKey",
-                      style: const pw.TextStyle(fontSize: 18))),
-              // Corpo do PDF com uma função de loop para iterar sobre os dados
-              for (var dados in dadosListView)
-                for (var key in dados.keys)
-                  if (key == 'Início')
+    pdf.addPage(pw.Page(
+      build: (context) {
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            // Cabeçalho do PDF
+            pw.Header(
+                level: 0,
+                child: pw.Text("Detalhes da Sessão: $sessaoKey",
+                    style: const pw.TextStyle(fontSize: 18))),
+            // Corpo do PDF com uma função de loop para iterar sobre os dados
+            for (var dados in dadosListView)
+              for (var key in dados.keys)
+                if (key == 'Início')
                   pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
@@ -159,21 +157,23 @@ Future<void> gerarECompartilharPDF(String sessaoKey, List<dynamic> dadosListView
                           text:
                               "Saturação Periférica de Oxigênio: ${dados['Final']['spo2Final']}"),
                       if (dados['Final']['comentario'] != null)
-                      pw.Annotation(
-                        child: pw.Text(
-                            "Comentários: ${dados['Final']['comentario']}"),
-                      )
+                        pw.Annotation(
+                          child: pw.Text(
+                              "Comentários: ${dados['Final']['comentario']}"),
+                        )
                     ],
                   ),
-            ],
-          );
-        },
-      ));
-      final bytes = await pdf.save();
-      await Printing.sharePdf(
-          bytes: bytes, filename: 'detalhes_sessao_$sessaoKey.pdf');
-    } on Exception catch (e) {
-      pw.Text(e.toString());
-      rethrow; // Rethrow para que a exceção seja tratada no método de chamada
-    }
-    }
+          ],
+        );
+      },
+    ));
+    final bytes = await pdf.save();
+    await Printing.sharePdf(
+      bytes: bytes,
+      filename: 'detalhes_sessao_$sessaoKey.pdf',
+    );
+  } on Exception catch (e) {
+    pw.Text(e.toString());
+    rethrow; // Rethrow para que a exceção seja tratada no método de chamada
+  }
+}

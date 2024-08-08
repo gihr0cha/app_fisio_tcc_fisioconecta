@@ -1,5 +1,4 @@
 import 'package:app_fisio_tcc/widgets/detalhesessao.dart';
-import 'package:app_fisio_tcc/widgets/navegation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -17,7 +16,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
   Widget build(BuildContext context) {
     FirebaseDatabase database = FirebaseDatabase.instance;
     final user = FirebaseAuth.instance.currentUser; // Usuário logado
-    final fisio = (user?.displayName ?? '').split(' ')[0]; // Variável para armazenar o nome do fisioterapeuta logado
+    final fisio = (user?.displayName ?? '').split(
+        ' ')[0]; // Variável para armazenar o nome do fisioterapeuta logado
     final paciente = widget.paciente; // Dados do paciente
     final filter = paciente['nome']; // Use o nome do paciente como filtro
 
@@ -91,7 +91,8 @@ class _HistoricoPageState extends State<HistoricoPage> {
                   var sessaoEntry = filteredList[index]; // Dados da sessão
                   String sessaoFilter = sessaoEntry.key; // Chave da sessão
                   String dataSessao = sessaoFilter.split(' ')[2];
-                  String horaSessao = sessaoFilter.split(' ')[3]; // Data da sessão
+                  String horaSessao =
+                      sessaoFilter.split(' ')[3]; // Data da sessão
 
                   return ListTile(
                     leading: const Icon(
