@@ -1,6 +1,6 @@
+import 'package:app_fisio_tcc/widgets/checkBoxFED.dart';
 import 'package:app_fisio_tcc/widgets/editpaciente.dart';
-import 'package:app_fisio_tcc/widgets/fieldsInicial.dart';
-import '../widgets/navegation.dart';
+import 'package:app_fisio_tcc/widgets/navegation.dart';
 import 'registerPacients_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -140,22 +140,24 @@ class _PacientePageState extends State<PacientePage> {
                       String nome = patientData['nome'];
 
                       return InkWell(
-                        
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      FieldsInicial(paciente: patientData)));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                 CheckBoxFED(paciente: patientData),
+                            ),
+                          );
                         },
                         child: ListTile(
-                          leading: const Icon(Icons.person,
-                              color: Colors.white),
+                          leading:
+                              const Icon(Icons.person, color: Colors.white),
                           title: Text(nome,
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.white)),
                           trailing: IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blueAccent),
+                            icon: const Icon(Icons.edit,
+                                color: Colors.blueAccent),
                             onPressed: () {
                               Navigator.push(
                                   context,
