@@ -1,51 +1,57 @@
 import 'package:flutter/material.dart';
+import '../logic/checkbox_fed_logic.dart';
 import 'fieldsInicial.dart';
 
-
-class CheckBoxFED extends StatelessWidget {
+class CheckBoxFED extends StatefulWidget {
   final dynamic paciente;
-  CheckBoxFED({super.key, required this.paciente});
+
+  const CheckBoxFED({super.key, required this.paciente});
+
+  @override
+  State<CheckBoxFED> createState() => _CheckBoxFEDState();
+}
+
+class _CheckBoxFEDState extends State<CheckBoxFED> {
+  final CheckBoxFEDLogic _logic = CheckBoxFEDLogic();
+
+  void _onSubmit() {
+    final selectedFields = _logic.getSelectedFields();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FieldsInicial(
+          selectedFields: selectedFields,
+          paciente: widget.paciente,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> _availableFields = [
-      {'label': 'Frequência Cardíaca', 'selected': false},
-      {'label': 'SPO2', 'selected': false},
-      {'label': 'Pressão Arterial', 'selected': false},
-      {'label': 'Percepção Subjetiva de Esforço', 'selected': false},
-      {'label': 'Dor', 'selected': false},
-    ];
-    void _onFieldSelected(bool? selected, int index) {
-      _availableFields[index]['selected'] = selected;
-    }
-
-    void _onSubmit() {
-      final selectedFields =
-          _availableFields.where((field) => field['selected']).toList();
-      // Navegue para a página de formulário passando os campos selecionados
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FieldsInicial(selectedFields: selectedFields, paciente: paciente),
-        ),
-      );
-    }
-
     return Scaffold(
-      appBar: AppBar(title: Text('Selecione os Campos')),
+      appBar: AppBar(
+        title: const Text('Selecione os Campos'),
+      ),
       body: ListView.builder(
-        itemCount: _availableFields.length,
+        itemCount: _logic.availableFields.length,
         itemBuilder: (context, index) {
+          final field = _logic.availableFields[index];
           return CheckboxListTile(
-            title: Text(_availableFields[index]['label']),
-            value: _availableFields[index]['selected'],
-            onChanged: (selected) => _onFieldSelected(selected, index),
+            title: Text(field['label']),
+            value: field['selected'],
+            onChanged: (selected) {
+              setState(() {
+                _logic.onFieldSelected(selected, index);
+              });
+            },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _onSubmit,
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }
