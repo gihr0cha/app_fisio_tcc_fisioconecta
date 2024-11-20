@@ -1,4 +1,5 @@
 class CheckBoxFEDLogic {
+  /// Lista de campos disponíveis
   final List<Map<String, dynamic>> availableFields = [
     {'label': 'Frequência Cardíaca', 'selected': false},
     {'label': 'SPO2', 'selected': false},

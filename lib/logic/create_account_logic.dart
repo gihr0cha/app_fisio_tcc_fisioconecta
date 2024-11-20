@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateAccountLogic {
+  // Chave global para o formulário de cadastro
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? email;
   String? password;
@@ -11,6 +12,7 @@ class CreateAccountLogic {
   String? errorMessage;
 
   bool validateAndSave(BuildContext context) {
+    // Valida e salva os campos do formulário, da para usar essa função em qualquer lugar (não só no botão de cadastro)
     final form = formKey.currentState;
     if (form!.validate()) {
       form.save();
@@ -20,8 +22,10 @@ class CreateAccountLogic {
   }
 
   Future<void> validateAndSubmit(BuildContext context) async {
+    // Valida e salva os campos do formulário, da para usar essa função em qualquer lugar (não só no botão de cadastro)
     if (validateAndSave(context)) {
       try {
+        // Cria um novo usuário com e-mail e senha
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
           email: email!,
@@ -39,22 +43,26 @@ class CreateAccountLogic {
         });
 
         if (context.mounted) {
+          // a função mounted verifica se o widget está montado na árvore de widgets
           context.go('/home');
         }
       } on FirebaseAuthException catch (e) {
+        // Tratamento de erros, exibindo uma mensagem de erro ao usuário
         errorMessage = switch (e.code) {
           'weak-password' => 'A senha fornecida é muito fraca',
           'email-already-in-use' => 'Esse e-mail já está em uso',
           _ => 'Erro desconhecido',
         };
         showMessage(context, errorMessage);
+        // o context é passado para a função para que a mensagem de erro possa ser exibida na tela, mas não é necessário 
       } catch (e) {
+        // o catch genérico captura qualquer erro que não seja do tipo FirebaseAuthException 
         errorMessage = 'Erro desconhecido';
         showMessage(context, errorMessage);
       }
     }
   }
-
+// Função para exibir uma mensagem de erro ao usuário 
   void showMessage(BuildContext context, String? errorMessage) {
     final snackBar = SnackBar(
       content: Text(errorMessage!),

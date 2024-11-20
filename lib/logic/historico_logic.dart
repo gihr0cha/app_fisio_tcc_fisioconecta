@@ -7,6 +7,7 @@ class HistoricoLogic {
 
   /// Obtém o nome do fisioterapeuta logado
   String getUserName() {
+    // essa funçao ja esta escrita em outras classes. Poderia ser criada uma classe comum para reutilizar essa função
     final user = _auth.currentUser;
     return (user?.displayName ?? '').split(' ')[0];
   }

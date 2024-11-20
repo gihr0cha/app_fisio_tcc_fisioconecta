@@ -18,6 +18,7 @@ class EditPacienteLogic {
 
   /// Valida e salva os dados do formulário
   bool validateAndSave(BuildContext context) {
+    // essa funcao nao precisa ser reescrita, pois é a mesma do arquivo register_pacients_logic.dart e pode ser reutilizada 
     final form = formKey.currentState;
     if (form!.validate()) {
       form.save();
