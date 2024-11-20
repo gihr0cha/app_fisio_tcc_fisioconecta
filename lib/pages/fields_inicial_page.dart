@@ -100,7 +100,7 @@ class _FieldsInicialState extends State<FieldsInicial> {
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () async {
                 if (_logic.validateForm(context)) {
-                  await _logic.saveInitialSession(widget.paciente, widget.selectedFields);
+                  await _logic.saveInitialSession(widget.paciente, widget.selectedFields, context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(

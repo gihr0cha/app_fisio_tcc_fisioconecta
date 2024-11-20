@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseUtils {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -41,5 +42,14 @@ class FormUtils {
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  static Future<void> saveData(DatabaseReference ref, Map<String, dynamic> data, BuildContext context) async {
+    try {
+      await ref.update(data);
+      showMessage(context, 'Dados salvos com sucesso!');
+    } catch (e) {
+      showMessage(context, 'Erro ao salvar os dados: $e');
+    }
   }
 }

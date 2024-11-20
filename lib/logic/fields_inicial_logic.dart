@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import '../utils.dart';
 
 class FieldsInicialLogic {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -16,26 +17,18 @@ class FieldsInicialLogic {
 
   /// Salva os dados iniciais da sessão no Firebase
   Future<void> saveInitialSession(
-      Map<String, dynamic> paciente, List<Map<String, dynamic>> selectedFields) async {
+      Map<String, dynamic> paciente, List<Map<String, dynamic>> selectedFields, BuildContext context) async {
     DatabaseReference sessionRef = _database.ref().child('sessoes').child(customSessionKey);
 
     List<String> initialData = selectedFields
         .map((field) => "${field['label']}: ${field['value']}")
         .toList();
 
-    await sessionRef.set({
-      'inicio_sessao': initialData,
-    });
+    await FormUtils.saveData(sessionRef, {'inicio_sessao': initialData}, context);
   }
 
   /// Valida o formulário
   bool validateForm(BuildContext context) {
-    if (formKey.currentState!.validate()) {
-      return true;
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Por favor, preencha todos os campos')),
-    );
-    return false;
+    return FormUtils.validateAndSave(formKey, context);
   }
 }

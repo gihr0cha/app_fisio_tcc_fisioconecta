@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import '../utils.dart';
 
 class FieldsExercicioLogic {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
@@ -33,26 +34,15 @@ class FieldsExercicioLogic {
   /// Salva os dados da sessão no Firebase
   Future<void> saveSession(BuildContext context) async {
     if (selectedExercise == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione um exercício!')),
-      );
+      FormUtils.showMessage(context, 'Selecione um exercício!');
       return;
     }
 
-    DatabaseReference sessionRef =
-        _database.ref('sessoes').child(sessionKey).child('exercicios');
+    DatabaseReference sessionRef = _database.ref('sessoes').child(sessionKey).child('exercicios');
 
     List<String> repeticao = controllers.map((controller) => controller.text).toList();
 
-    await sessionRef.update({
-      selectedExercise!: {
-        'repeticao': repeticao,
-      },
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Dados salvos com sucesso!')),
-    );
+    await FormUtils.saveData(sessionRef, {selectedExercise!: {'repeticao': repeticao}}, context);
 
     resetState();
   }
