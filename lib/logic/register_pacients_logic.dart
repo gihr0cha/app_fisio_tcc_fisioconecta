@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'firebase_utils.dart';
 
 class RegisterPacientsLogic {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,21 +15,11 @@ class RegisterPacientsLogic {
 
   /// Obtém o nome do fisioterapeuta logado
   String getUserName() {
-    final user = _auth.currentUser;
-    return (user?.displayName ?? '').split(' ')[0];
+    return FirebaseUtils.getUserName();
   }
-
   /// Valida e salva os campos do formulário
-  bool validateAndSave(BuildContext context) {
-    final form = formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Paciente salvo com sucesso!')),
-      );
-      return true;
-    }
-    return false;
+   bool validateAndSave(BuildContext context) {
+    return FormUtils.validateAndSave(formKey, context);
   }
 
   /// Salva os dados do paciente no Firebase Realtime Database

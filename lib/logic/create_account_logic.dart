@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'firebase_utils.dart';
 
 class CreateAccountLogic {
   // Chave global para o formulário de cadastro
@@ -11,14 +12,8 @@ class CreateAccountLogic {
   String? name;
   String? errorMessage;
 
-  bool validateAndSave(BuildContext context) {
-    // Valida e salva os campos do formulário, da para usar essa função em qualquer lugar (não só no botão de cadastro)
-    final form = formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      return true;
-    }
-    return false;
+bool validateAndSave(BuildContext context) {
+    return FormUtils.validateAndSave(formKey, context);
   }
 
   Future<void> validateAndSubmit(BuildContext context) async {
@@ -53,26 +48,13 @@ class CreateAccountLogic {
           'email-already-in-use' => 'Esse e-mail já está em uso',
           _ => 'Erro desconhecido',
         };
-        showMessage(context, errorMessage);
+        FormUtils.showMessage(context, errorMessage);
         // o context é passado para a função para que a mensagem de erro possa ser exibida na tela, mas não é necessário 
       } catch (e) {
         // o catch genérico captura qualquer erro que não seja do tipo FirebaseAuthException 
         errorMessage = 'Erro desconhecido';
-        showMessage(context, errorMessage);
+        FormUtils.showMessage(context, errorMessage);
       }
     }
-  }
-// Função para exibir uma mensagem de erro ao usuário 
-  void showMessage(BuildContext context, String? errorMessage) {
-    final snackBar = SnackBar(
-      content: Text(errorMessage!),
-      action: SnackBarAction(
-        label: 'Fechar',
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

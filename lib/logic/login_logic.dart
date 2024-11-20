@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import 'firebase_utils.dart';
 
 class LoginLogic {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -9,16 +10,7 @@ class LoginLogic {
   String? errorMessage;
 
   bool validateAndSave(BuildContext context) {
-    final form = formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      return true;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao validar o login')),
-      );
-      return false;
-    }
+    return FormUtils.validateAndSave(formKey, context);
   }
 
   Future<void> validateAndSubmit(BuildContext context) async {
@@ -43,18 +35,7 @@ class LoginLogic {
       } else {
         errorMessage = 'Erro desconhecido';
       }
-      showMessage(context, errorMessage);
+      FormUtils.showMessage(context, errorMessage);
     }
-  }
-
-  void showMessage(BuildContext context, String? message) {
-    final snackBar = SnackBar(
-      content: Text(message!),
-      action: SnackBarAction(
-        label: 'Fechar',
-        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
