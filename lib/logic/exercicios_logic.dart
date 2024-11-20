@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'firebase_utils.dart';
+import '../utils.dart';
 
 class ExerciciosLogic {
 
