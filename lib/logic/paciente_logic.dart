@@ -1,13 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'firebase_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PacienteLogic {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String getUserName() {
-    final user = _auth.currentUser;
-    return (user?.displayName ?? '').split(' ')[0];
+ String getUserName() {
+    return FirebaseUtils.getUserName();
   }
 
   String? getFisioId() {
@@ -19,11 +19,7 @@ class PacienteLogic {
   }
 
   Map<String, dynamic> formatDatabaseSnapshot(Map<dynamic, dynamic> map) {
-    Map<String, dynamic> formattedMap = {};
-    map.forEach((key, value) {
-      formattedMap[key.toString()] = value;
-    });
-    return formattedMap;
+    return FirebaseUtils.formatDatabaseSnapshot(map);
   }
 
   List<dynamic> filterPacientes(

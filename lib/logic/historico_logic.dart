@@ -1,15 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class HistoricoLogic {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseDatabase _database = FirebaseDatabase.instance;
 
-  /// Obtém o nome do fisioterapeuta logado
+class HistoricoLogic {
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
   String getUserName() {
-    // essa funçao ja esta escrita em outras classes. Poderia ser criada uma classe comum para reutilizar essa função
-    final user = _auth.currentUser;
-    return (user?.displayName ?? '').split(' ')[0];
+    return FirebaseUtils.getUserName();
   }
 
   /// Retorna o stream das sessões do Firebase Realtime Database
@@ -18,12 +14,8 @@ class HistoricoLogic {
   }
 
   /// Formata os dados do snapshot do Firebase para um mapa utilizável
-  Map<String, dynamic> formatDatabaseSnapshot(Map<dynamic, dynamic> map) {
-    Map<String, dynamic> formattedMap = {};
-    map.forEach((key, value) {
-      formattedMap[key.toString()] = value;
-    });
-    return formattedMap;
+Map<String, dynamic> formatDatabaseSnapshot(Map<dynamic, dynamic> map) {
+    return FirebaseUtils.formatDatabaseSnapshot(map);
   }
 
   /// Filtra as sessões pelo nome do paciente
