@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../logic/home_logic.dart';
 import '../widgets/navegation.dart';
-import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,10 +10,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final HomeLogic _logic = HomeLogic();
+
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final nome = (user?.displayName ?? '').split(' ')[0];
+    final nome = _logic.getUserName();
 
     return Scaffold(
       backgroundColor: Colors.green,
@@ -28,23 +28,18 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.pop(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
-                    },
-                    icon: const Icon(Icons.logout),
-                    color: Colors.white),
+                  onPressed: () => _logic.logout(context),
+                  icon: const Icon(Icons.logout, color: Colors.white),
+                ),
                 const SizedBox(width: 10),
                 const Text(
                   'FisioConecta - Home',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                      color: Colors.white),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 22,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -52,9 +47,10 @@ class _HomePageState extends State<HomePage> {
               'Olá, $nome!',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Colors.white),
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: Colors.white,
+              ),
             ),
           ],
         ),
@@ -80,18 +76,20 @@ class _HomePageState extends State<HomePage> {
               'Bem-vindo ao FisioConecta!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.green),
+                fontWeight: FontWeight.w500,
+                fontSize: 22,
+                color: Colors.green,
+              ),
             ),
             SizedBox(height: 20),
             Text(
               'Esse é um aplicativo móvel desenvolvido para auxiliar fisioterapeutas no preenchimento e acompanhamento da Ficha de Evolução Diária (FED) de seus pacientes. Criado por Giovana de Oliveira Rocha e Ruan Mateus de Souza Nunes, o aplicativo visa resolver problemas comuns enfrentados pelos profissionais de saúde, como a falta de disponibilidade de sistemas de registro online no local de tratamento e a necessidade de transferir manualmente informações de papel para o sistema digital',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Colors.green),
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: Colors.green,
+              ),
             ),
           ],
         ),

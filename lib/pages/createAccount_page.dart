@@ -1,7 +1,6 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
+import '../logic/create_account_logic.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -11,59 +10,7 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
-  final formKey = GlobalKey<FormState>();
-  String? _email;
-  String? _password;
-  String? _name;
-  String? erroMessage;
-
-  bool validateAndSave() {
-    // acessa o estado atual do formulário e valida os campos
-    final form = formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      return true;
-    } else {
-      return false;
-    }
-  }
-// A função validateAndSubmit valida os campos do formulário e, se estiverem corretos, cria um novo usuário no Firebase Authentication e salva os dados do fisioterapeuta no Firebase Realtime Database
-  void validateAndSubmit() async {
-    if (validateAndSave()) {
-      try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _email!,
-        password: _password!,
-
-      );
-      await userCredential.user!.updateDisplayName(_name);
-      
-      // Salva os dados do fisioterapeuta no Firebase Realtime Database
-      final personalizarId = '${_email!.split('@')[0]}_${userCredential.user!.uid}';
-      DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-      dbRef.child('fisioterapeutas').child(personalizarId).set({
-        'nome': _name,
-        'pacientes': {}  // Inicialmente, o fisioterapeuta não tem pacientes associados
-      });
-        if (mounted) {
-          context.go('/home');
-        }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          erroMessage = 'A senha fornecida é muito fraca';
-        } else if (e.code == 'email-already-in-use') {
-          erroMessage = 'Esse e-mail já está em uso';
-        } else {
-          
-          erroMessage = 'Erro desconhecido';
-        }
-        mensagem(context, erroMessage);
-      } catch (e) {
-        
-        erroMessage = 'Erro desconhecido';
-      }
-    }
-  }
+  final CreateAccountLogic _logic = CreateAccountLogic();
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +18,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
-             color: Colors.green
-              ),
-            ),
-      
+            decoration: const BoxDecoration(color: Colors.green),
+          ),
           SingleChildScrollView(
-            // O SingleChildScrollView permite que o conteúdo da tela seja rolável
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -93,85 +36,72 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.only(
-                    top: 0,
-                    bottom: 32,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Gerenciamento de pacientes para fisioterapeutas.',
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      )
-                    ],
+                  padding: EdgeInsets.only(bottom: 32),
+                  child: Text(
+                    'Gerenciamento de pacientes para fisioterapeutas.',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 Form(
-                  key: formKey,
+                  key: _logic.formKey,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
-                        // O TextFormField de nome é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
-                          onSaved: (value) => _name = value,
-                          
-                          textInputAction: TextInputAction.next,
+                          onSaved: (value) => _logic.name = value,
                           decoration: const InputDecoration(
                             hintText: 'Digite seu nome',
                             labelText: 'Nome:',
                           ),
+                          textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: 24),
-                        // O TextFormField de email é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
-                          onSaved: (value) => _email = value,
-                          textInputAction: TextInputAction.next,
+                          onSaved: (value) => _logic.email = value,
                           decoration: const InputDecoration(
                             hintText: 'Digite seu email',
                             labelText: 'E-mail:',
                           ),
+                          textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: 24),
-                        // O TextFormField de senha é um campo de texto que pode ser validado e salvo
                         TextFormField(
                           validator: (value) =>
                               value!.isEmpty ? 'Campo obrigatório' : null,
-                          onSaved: (value) => _password = value,
-                          textInputAction: TextInputAction.next,
+                          onSaved: (value) => _logic.password = value,
                           obscureText: true,
                           decoration: const InputDecoration(
                             hintText: 'Digite sua senha',
                             labelText: 'Senha:',
                           ),
+                          textInputAction: TextInputAction.done,
                         ),
                         const SizedBox(height: 50),
-                        // O ElevatedButton é um botão que, quando pressionado, chama a função validateAndSubmit
                         SizedBox(
-                          width: double.maxFinite,
+                          width: double.infinity,
                           height: 52,
                           child: ElevatedButton(
-                            onPressed: validateAndSubmit,
+                            onPressed: () => _logic.validateAndSubmit(context),
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 3,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                )),
+                              backgroundColor: Colors.white,
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
                             child: const Text(
                               'Cadastrar',
                               style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600),
+                                color: Colors.green,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -181,51 +111,32 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             const Text(
                               'Já possui uma conta?',
                               style: TextStyle(
-                                  fontSize: 16, color: Colors.black),
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                             TextButton(
                               onPressed: () => context.go('/'),
                               child: const Text(
                                 'Entre!',
                                 style: TextStyle(
-                                  color: Colors.black,
                                   fontSize: 16,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-// A função mensagem exibe uma mensagem de erro na tela
-  void mensagem(BuildContext context, String? erroMessage) {
-    if (mounted) {
-      final snackBar = SnackBar(
-        content: Text(erroMessage!),
-        action: SnackBarAction(
-          label: 'Fechar',
-          onPressed: () {
-            if (mounted) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            }
-          },
-        ),
-      );
-      if (mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        });
-      }
-    }
   }
 }
