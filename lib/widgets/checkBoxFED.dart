@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../logic/checkbox_fed_logic.dart';
-import 'fieldsInicial.dart';
+import '../pages/fields_inicial_page.dart';
 
 class CheckBoxFED extends StatefulWidget {
   final dynamic paciente;

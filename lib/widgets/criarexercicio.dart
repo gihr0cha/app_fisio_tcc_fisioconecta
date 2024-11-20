@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import '../logic/criar_exercicio_logic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../logic/firebase_utils.dart'; 
 
 class CriarExercicio extends StatefulWidget {
   const CriarExercicio({super.key});
@@ -10,35 +9,12 @@ class CriarExercicio extends StatefulWidget {
   State<CriarExercicio> createState() => _CriarExercicioState();
 }
 
-// A classe _CriarExercicioState é um StatefulWidget que cria um formulário para o fisioterapeuta inserir o nome do exercício que deseja adicionar ao banco de dados
 class _CriarExercicioState extends State<CriarExercicio> {
-  final user = FirebaseAuth.instance.currentUser;
-  final _formKey = GlobalKey<FormState>();
-  FirebaseDatabase database = FirebaseDatabase.instance;
-  String? nomeExercicio;
+  final CriarExercicioLogic _logic = CriarExercicioLogic();
 
-
-// O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, cria um novo nó no banco de dados Firebase Realtime Database para o exercício
-  void validateAndSubmit() async {
-    if (FormUtils.validateAndSave(_formKey, context)) {
-      // Cria um novo nó para o exercício sob 'exercicios'
-      DatabaseReference dbRef = FirebaseDatabase.instance.ref();
-      DatabaseReference newExerciseRef = dbRef.child('exercicios');
-
-      // Generate a unique ID for the exercise
-      String? exerciseId = newExerciseRef.push().key;
-// O método update atualiza o nó do exercício com o nome do exercício inserido pelo fisioterapeuta
-      await newExerciseRef.update({
-        exerciseId!: nomeExercicio,
-      });
-
-      print(database);
-    }
-  }
-
-// O método build cria um formulário com um campo de texto para o nome do exercício e um botão para enviar o formulário
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     final nome = (user?.displayName ?? '').split(' ')[0];
 
     return Scaffold(
@@ -54,8 +30,6 @@ class _CriarExercicioState extends State<CriarExercicio> {
         ),
         title: Text('Bem-vindo $nome'),
       ),
-
-      // O formulário é criado com um campo de texto para o nome do exercício
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -66,17 +40,16 @@ class _CriarExercicioState extends State<CriarExercicio> {
               style: TextStyle(fontSize: 24, color: Colors.green),
             ),
             Form(
-              key: _formKey,
+              key: _logic.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
                     decoration: const InputDecoration(
-                      hintText: 'Nome do Exercicio',
+                      hintText: 'Nome do Exercício',
                     ),
-                    // O validador verifica se o campo está vazio e exibe uma mensagem de erro se estiver
                     validator: (value) => value!.isEmpty ? 'inválido' : null,
-                    onSaved: (newValue) => nomeExercicio = newValue,
+                    onSaved: (newValue) => _logic.nomeExercicio = newValue,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -84,8 +57,11 @@ class _CriarExercicioState extends State<CriarExercicio> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
-                      onPressed: validateAndSubmit,
-                      child: const Text('Enviar', style: TextStyle(fontSize: 20, color: Colors.white)),
+                      onPressed: () => _logic.addExercicio(context),
+                      child: const Text(
+                        'Enviar',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
                     ),
                   ),
                 ],
