@@ -1,10 +1,10 @@
-import 'package:app_fisio_tcc/widgets/detalhesessao.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import '../logic/historico_logic.dart';
+import '../widgets/detalhesessao.dart';
 
 class HistoricoPage extends StatefulWidget {
   final dynamic paciente;
+
   const HistoricoPage({super.key, required this.paciente});
 
   @override
@@ -12,14 +12,13 @@ class HistoricoPage extends StatefulWidget {
 }
 
 class _HistoricoPageState extends State<HistoricoPage> {
+  final HistoricoLogic _logic = HistoricoLogic();
+
   @override
   Widget build(BuildContext context) {
-    FirebaseDatabase database = FirebaseDatabase.instance;
-    final user = FirebaseAuth.instance.currentUser; // Usuário logado
-    final fisio = (user?.displayName ?? '').split(
-        ' ')[0]; // Variável para armazenar o nome do fisioterapeuta logado
-    final paciente = widget.paciente; // Dados do paciente
-    final filter = paciente['nome']; // Use o nome do paciente como filtro
+    final fisio = _logic.getUserName();
+    final paciente = widget.paciente;
+    final filter = paciente['nome'];
 
     return Scaffold(
       backgroundColor: Colors.green,
@@ -38,17 +37,19 @@ class _HistoricoPageState extends State<HistoricoPage> {
               'Evolução - $filter',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 22,
-                  color: Colors.white),
+                fontWeight: FontWeight.w500,
+                fontSize: 22,
+                color: Colors.white,
+              ),
             ),
             Text(
               'Olá, $fisio',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  color: Color(0xFFFFFFFF)),
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: Colors.white,
+              ),
             ),
           ],
         ),
@@ -61,21 +62,13 @@ class _HistoricoPageState extends State<HistoricoPage> {
         ),
       ),
       body: StreamBuilder(
-        stream: database.ref().child('sessoes').onValue,
+        stream: _logic.getSessoesStream(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData && snapshot.data?.snapshot.value != null) {
             Map<dynamic, dynamic> map = snapshot.data!.snapshot.value;
-            Map<String, dynamic> formattedMap = {};
-            map.forEach((key, value) {
-              formattedMap[key.toString()] = value;
-            });
+            Map<String, dynamic> formattedMap = _logic.formatDatabaseSnapshot(map);
 
-            var filteredList = formattedMap.entries
-                .where((entry) => entry.key
-                    .toString()
-                    .toLowerCase()
-                    .contains(filter.toLowerCase()))
-                .toList();
+            var filteredList = _logic.filterSessoes(formattedMap, filter);
 
             return Container(
               margin: const EdgeInsets.all(10),
@@ -86,13 +79,12 @@ class _HistoricoPageState extends State<HistoricoPage> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: filteredList.length, // Número de sessões disponíveis
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
-                  var sessaoEntry = filteredList[index]; // Dados da sessão
-                  String sessaoFilter = sessaoEntry.key; // Chave da sessão
-                  String dataSessao = sessaoFilter.split(' ')[2];
-                  String horaSessao =
-                      sessaoFilter.split(' ')[3]; // Data da sessão
+                  var sessaoEntry = filteredList[index];
+                  String sessaoKey = sessaoEntry.key;
+                  String dataSessao = sessaoKey.split(' ')[2];
+                  String horaSessao = sessaoKey.split(' ')[3];
 
                   return ListTile(
                     leading: const Icon(
@@ -116,7 +108,7 @@ class _HistoricoPageState extends State<HistoricoPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetalhesSessaoPage(
-                            sessaoKey: sessaoFilter,
+                            sessaoKey: sessaoKey,
                           ),
                         ),
                       );
@@ -126,9 +118,13 @@ class _HistoricoPageState extends State<HistoricoPage> {
               ),
             );
           } else if (snapshot.hasError) {
-            return const Text('Erro ao carregar dados');
+            return const Center(
+              child: Text('Erro ao carregar dados'),
+            );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),
