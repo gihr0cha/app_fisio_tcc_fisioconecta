@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'utils.dart';
+import '../utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PacienteLogic {
