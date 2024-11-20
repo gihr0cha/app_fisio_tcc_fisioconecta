@@ -157,7 +157,7 @@ class _PacientePageState extends State<PacientePage> {
           }
         },
       ),
-      bottomNavigationBar: const NavigacaoBar(),
+      bottomNavigationBar: const NavigacaoBar(currentIndex: 1), // Página "Pacientes"
     );
   }
 }

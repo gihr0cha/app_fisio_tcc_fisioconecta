@@ -141,7 +141,7 @@ class _FiltrarEvolucaoPageState extends State<FiltrarEvolucaoPage> {
               return const CircularProgressIndicator();
             }
           }),
-      bottomNavigationBar: const NavigacaoBar(),
+      bottomNavigationBar: const NavigacaoBar(currentIndex: 3),
     );
   }
 }

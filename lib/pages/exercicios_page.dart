@@ -129,7 +129,7 @@ class _ExerciciosPageState extends State<ExerciciosPage> {
           }
         },
       ),
-      bottomNavigationBar: const NavigacaoBar(),
+      bottomNavigationBar: const NavigacaoBar(currentIndex: 2),
     );
   }
 }

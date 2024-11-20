@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'firebase_utils.dart';
+import 'utils.dart';
 
 class CriarExercicioLogic {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
