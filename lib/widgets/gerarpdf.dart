@@ -14,166 +14,147 @@ Future<void> gerarECompartilharPDF(
           children: [
             // Cabeçalho do PDF
             pw.Header(
-                level: 0,
-                child: pw.Text("Detalhes da Sessão: $sessaoKey",
-                    style: const pw.TextStyle(fontSize: 18))),
-            // Corpo do PDF com uma função de loop para iterar sobre os dados
-            for (var dados in dadosListView)
-              for (var key in dados.keys)
-                if (key == 'Início')
-                  pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      // Início
-                      pw.Header(
-                          level: 1,
-                          child: pw.Text("Início",
-                              style: const pw.TextStyle(
-                                  fontSize: 16, color: PdfColors.blueAccent))),
-                      pw.Bullet(
-                          text:
-                              "Paciente sentiu dor? ${dados['Início']['dor'] == true ? 'Sim' : 'Não'}"),
-                      pw.Bullet(
-                          text:
-                              "Dor Torácica: ${dados['Início']['dorToracicaInicial']}"),
-                      pw.Bullet(
-                          text:
-                              "Frequência Cardíaca: ${dados['Início']['freqCardiacaInicial']}"),
-                      pw.Bullet(
-                          text:
-                              "Pressão Arterial: ${dados['Início']['paInicial']}"),
-                      pw.Bullet(
-                          text:
-                              "Percepção Subjetiva de Esforço: ${dados['Início']['pseInicial']}"),
-                      pw.Bullet(
-                          text:
-                              "Saturação Periférica de Oxigênio: ${dados['Início']['spo2Inicial']}"),
-
-                      // Exercícios
-                      pw.Header(
-                        level: 1,
-                        child: pw.Text("Exercícios",
-                            style: const pw.TextStyle(
-                                fontSize: 16, color: PdfColors.blueAccent)),
-                      ),
-                      pw.Table(
-                        border: pw.TableBorder.all(),
-                        columnWidths: <int, pw.TableColumnWidth>{
-                          0: const pw.FlexColumnWidth(),
-                          1: const pw.FixedColumnWidth(100),
-                        },
-                        children: [
-                          // Cabeçalho da tabela de exercícios
-                          pw.TableRow(
-                            children: [
-                              // Adicionando nome do exercício
-                              pw.Padding(
-                                padding: const pw.EdgeInsets.all(5),
-                                child: pw.Text(
-                                  'Exercício',
-                                  style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold),
-                                  textAlign: pw.TextAlign.center,
-                                ),
-                              ),
-                              // Encontrar o maior número de séries entre todos os exercícios
-                              for (int i = 0;
-                                  i <
-                                      dados['Exercícios']
-                                          .values
-                                          .map((e) => e['repeticao'].length)
-                                          .reduce((a, b) => a > b ? a : b);
-                                  i++)
-                                pw.Padding(
-                                  // Adicionando o número da série
-                                  padding: const pw.EdgeInsets.all(5),
-                                  child: pw.Text(
-                                    'Série: ${i + 1}',
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold),
-                                    textAlign: pw.TextAlign.center,
-                                  ),
-                                ),
-                            ],
-                          ),
-
-                          // Adicionando linhas de exercícios após o cabeçalho
-                          for (var exercicio in dados['Exercícios'].keys)
-                            pw.TableRow(
-                              children: [
-                                // Adicionando nome do exercício
-                                pw.Padding(
-                                  padding: const pw.EdgeInsets.all(5),
-                                  child: pw.Text(exercicio),
-                                ),
-                                // Adicionando séries de pesos para cada exercício
-                                for (int i = 0;
-                                    i <
-                                        dados['Exercícios']
-                                            .values
-                                            .map((e) => e['repeticao'].length)
-                                            .reduce((a, b) => a > b ? a : b);
-                                    i++)
-                                  // Adicionando o peso da série
-                                  pw.Padding(
-                                    padding: const pw.EdgeInsets.all(5),
-                                    // Verificando se a série de pesos existe para o exercício
-                                    child: pw.Text(
-                                      i <
-                                              dados['Exercícios'][exercicio]
-                                                      ['repeticao']
-                                                  .length
-                                          ? dados['Exercícios'][exercicio]
-                                                  ['repeticao'][i]
-                                              .toString()
-                                          : ' ',
-                                      textAlign: pw.TextAlign.center,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                        ],
-                      ),
-
-                      // Final
-                      pw.Header(
-                          level: 1,
-                          child: pw.Text("Final",
-                              style: const pw.TextStyle(
-                                  fontSize: 16, color: PdfColors.blueAccent))),
-                      pw.Bullet(
-                          text:
-                              "Dor Torácica: ${dados['Final']['dorToracicaFinal']}"),
-                      pw.Bullet(
-                          text:
-                              "Frequência Cardíaca Final: ${dados['Final']['freqCardiacaFinal']}"),
-                      pw.Bullet(
-                          text:
-                              "Pressão Arterial: ${dados['Final']['paFinal']}"),
-                      pw.Bullet(
-                          text:
-                              "Percepção Subjetiva de Esforço: ${dados['Final']['pseFinal']}"),
-                      pw.Bullet(
-                          text:
-                              "Saturação Periférica de Oxigênio: ${dados['Final']['spo2Final']}"),
-                      if (dados['Final']['comentario'] != null)
-                        pw.Annotation(
-                          child: pw.Text(
-                              "Comentários: ${dados['Final']['comentario']}"),
-                        )
-                    ],
-                  ),
+              level: 0,
+              child: pw.Text("Detalhes da Sessão: $sessaoKey",
+                  style: const pw.TextStyle(fontSize: 18)),
+            ),
+            // Corpo do PDF
+            for (var dados in dadosListView) _buildSessionDetails(dados),
           ],
         );
       },
     ));
+
     final bytes = await pdf.save();
     await Printing.sharePdf(
       bytes: bytes,
       filename: 'detalhes_sessao_$sessaoKey.pdf',
     );
   } on Exception catch (e) {
-    pw.Text(e.toString());
-    rethrow; // Rethrow para que a exceção seja tratada no método de chamada
+    print('Erro ao gerar PDF: $e');
+    rethrow;
   }
+}
+
+/// Constrói os detalhes da sessão
+pw.Widget _buildSessionDetails(Map<String, dynamic> dados) {
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      if (dados.containsKey('Início')) _buildInicioSection(dados['Início']),
+      if (dados.containsKey('Exercícios'))
+        _buildExerciciosSection(dados['Exercícios']),
+      if (dados.containsKey('Final')) _buildFinalSection(dados['Final']),
+    ],
+  );
+}
+
+/// Constrói a seção "Início"
+pw.Widget _buildInicioSection(Map<String, dynamic> inicio) {
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Header(
+        level: 1,
+        child: pw.Text("Início",
+            style:
+                const pw.TextStyle(fontSize: 16, color: PdfColors.blueAccent)),
+      ),
+      pw.Bullet(
+          text:
+              "Paciente sentiu dor? ${inicio['dor'] == true ? 'Sim' : 'Não'}"),
+      pw.Bullet(text: "Dor Torácica: ${inicio['dorToracicaInicial']}"),
+      pw.Bullet(text: "Frequência Cardíaca: ${inicio['freqCardiacaInicial']}"),
+      pw.Bullet(text: "Pressão Arterial: ${inicio['paInicial']}"),
+      pw.Bullet(
+          text: "Percepção Subjetiva de Esforço: ${inicio['pseInicial']}"),
+      pw.Bullet(
+          text: "Saturação Periférica de Oxigênio: ${inicio['spo2Inicial']}"),
+    ],
+  );
+}
+
+/// Constrói a seção "Exercícios"
+pw.Widget _buildExerciciosSection(Map<String, dynamic> exercicios) {
+  final maxSeries = exercicios.values
+      .map((e) => e['repeticao']?.length ?? 0)
+      .reduce((a, b) => a > b ? a : b);
+
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Header(
+        level: 1,
+        child: pw.Text("Exercícios",
+            style:
+                const pw.TextStyle(fontSize: 16, color: PdfColors.blueAccent)),
+      ),
+      pw.Table(
+        border: pw.TableBorder.all(),
+        children: [
+          // Cabeçalho da tabela
+          pw.TableRow(
+            children: [
+              pw.Padding(
+                padding: const pw.EdgeInsets.all(5),
+                child: pw.Text("Exercício",
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              ),
+              for (int i = 0; i < maxSeries; i++)
+                pw.Padding(
+                  padding: const pw.EdgeInsets.all(5),
+                  child: pw.Text("Série ${i + 1}",
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ),
+            ],
+          ),
+          // Linhas de exercícios
+          for (var entry in exercicios.entries)
+            pw.TableRow(
+              children: [
+                pw.Padding(
+                  padding: const pw.EdgeInsets.all(5),
+                  child: pw.Text(entry.key),
+                ),
+                for (int i = 0; i < maxSeries; i++)
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.all(5),
+                    child: pw.Text(
+                      i < (entry.value['repeticao']?.length ?? 0)
+                          ? entry.value['repeticao'][i].toString()
+                          : '',
+                      textAlign: pw.TextAlign.center,
+                    ),
+                  ),
+              ],
+            ),
+        ],
+      ),
+    ],
+  );
+}
+
+/// Constrói a seção "Final"
+pw.Widget _buildFinalSection(Map<String, dynamic> finalData) {
+  return pw.Column(
+    crossAxisAlignment: pw.CrossAxisAlignment.start,
+    children: [
+      pw.Header(
+        level: 1,
+        child: pw.Text("Final",
+            style:
+                const pw.TextStyle(fontSize: 16, color: PdfColors.blueAccent)),
+      ),
+      pw.Bullet(text: "Dor Torácica: ${finalData['dorToracicaFinal']}"),
+      pw.Bullet(
+          text: "Frequência Cardíaca Final: ${finalData['freqCardiacaFinal']}"),
+      pw.Bullet(text: "Pressão Arterial: ${finalData['paFinal']}"),
+      pw.Bullet(
+          text: "Percepção Subjetiva de Esforço: ${finalData['pseFinal']}"),
+      pw.Bullet(
+          text: "Saturação Periférica de Oxigênio: ${finalData['spo2Final']}"),
+      if (finalData['comentario'] != null)
+        pw.Text("Comentários: ${finalData['comentario']}"),
+    ],
+  );
 }
