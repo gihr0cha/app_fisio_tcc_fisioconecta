@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../logic/firebase_utils.dart'; 
 
 class CriarExercicio extends StatefulWidget {
   const CriarExercicio({super.key});
@@ -15,20 +16,11 @@ class _CriarExercicioState extends State<CriarExercicio> {
   final _formKey = GlobalKey<FormState>();
   FirebaseDatabase database = FirebaseDatabase.instance;
   String? nomeExercicio;
-// O método validateAndSave valida o formulário e salva o nome do exercício no estado do widget
-  bool validateAndSave() {
-    final form = _formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      return true;
-    } else {
-      return false;
-    }
-  }
+
 
 // O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, cria um novo nó no banco de dados Firebase Realtime Database para o exercício
   void validateAndSubmit() async {
-    if (validateAndSave()) {
+    if (FormUtils.validateAndSave(_formKey, context)) {
       // Cria um novo nó para o exercício sob 'exercicios'
       DatabaseReference dbRef = FirebaseDatabase.instance.ref();
       DatabaseReference newExerciseRef = dbRef.child('exercicios');

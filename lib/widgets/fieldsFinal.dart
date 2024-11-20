@@ -2,6 +2,7 @@ import 'package:app_fisio_tcc/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../logic/firebase_utils.dart'; 
 
 class FieldsFinal extends StatefulWidget {
   final dynamic paciente; // Paciente
@@ -57,25 +58,10 @@ class _FieldsFinalState extends State<FieldsFinal> {
     sessionKey = widget.sessionKey; // Inicializa a chave da sessão
   }
 
-  bool validateAndSave() {
-    // O método validateAndSave verifica se o formulário é válido e salva os dados no estado do widget
-    final form = _formKey.currentState;
-    if (form!.validate()) {
-      form.save();
-      return true;
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro ao validar o formulário'),
-        ),
-      );
-      return false;
-    }
-  }
 
   void validateAndSubmit() {
     // O método validateAndSubmit chama o método validateAndSave e, se o formulário for válido, atualiza os parâmetros de saúde final no banco de dados
-    if (validateAndSave()) {
+    if (FormUtils.validateAndSave(_formKey, context)) {
       DatabaseReference dbRef = database.ref();
       DatabaseReference sessionRef = dbRef
           .child('sessoes')
