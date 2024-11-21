@@ -23,7 +23,11 @@ class LoginLogic {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Usuário logado: ${user.user!.uid}')),
         );
-        if (Navigator.canPop(context)) context.go('/home');
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        } else {
+          GoRouter.of(context).go('/home');
+        }
       }
     } catch (e) {
       if (e is FirebaseAuthException) {
